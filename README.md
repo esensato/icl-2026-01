@@ -11,13 +11,7 @@
 - Ativar `IBM Cloud`
 
     [IBM Cloud](https://github.com/academic-initiative/documentation/blob/main/academic-initiative/how-to/How-to-create-an-IBM-Cloud-account/readme.md)
-
-### Language Translator
-
-- Acesso via `postman`
-    - Utilizar a URL `https://api.us-south.language-translator.watson.cloud.ibm.com/instances/INSTANCE_ID/v3/translate?version=2018-05-01`
-    - Autenticação deve ser `Basic Auth` onde `Username` deve ser `apikey` e `Password` a chave de API
-    
+   
 ### Uso NLU
 
 - Acesso via `postman`
@@ -30,10 +24,10 @@
 
 - Instalar a biblioteca
 
-    ```nodejs
-    npm init -y
-    npm i --save ibm-watson
-    ```
+  ```nodejs
+  npm init -y
+  npm i --save ibm-watson
+  ```
 - Categorias
 
 ```json
