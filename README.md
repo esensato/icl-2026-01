@@ -16,6 +16,9 @@
 - Acessar a url `https://cloud.ibm.com/`
 ### Uso NLU
 
+- Chave de API - lK4mC2Ydi38JMD92Ng1kD7K71zLfG14Sks22OxvG-jCp
+- URL - https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/f3dd6fa0-fd00-43c7-b8f5-dea520cc7ce7
+
 - Instalando as bibliotecas do *python*
 ```bash
 pip install --upgrade "ibm-watson>=8.0.0"
