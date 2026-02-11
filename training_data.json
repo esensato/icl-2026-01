@@ -34,5 +34,29 @@
         "labels": [
             "Comercial"
         ]
+    },
+    {
+        "text": "Quero uma cotação",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Gostaria de uma visita de um vendedor",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Preciso de uma demonstração do produto",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Preciso de uma ajuda com uma cotação",
+        "labels": [
+            "Comercial"
+        ]
     }
 ]
