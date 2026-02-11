@@ -144,9 +144,8 @@ with open('training_data.json', 'rb') as training_data:
 
 print(model)
 ```
-- Acompanhando o *status* do treinamento
+- Acompanhando o *status* do treinamento (obter o `model_id`)
 ```python
-model_id = model['MeuModelo']
 status = nlu.get_classifications_model(model_id=model_id).get_result()
 print(status['status'])
 ```
@@ -156,7 +155,7 @@ print(status['status'])
 from ibm_watson.natural_language_understanding_v1 import Features, ClassificationsOptions
 
 response = nlu.analyze(
-    text="Your new text to analyze",
+    text="Quero pagar boleto",
     features=Features(
         classifications=ClassificationsOptions(model=model_id)
     )
