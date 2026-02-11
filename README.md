@@ -45,34 +45,68 @@ print(json.dumps(response, indent=2))
 #### Treinando um modelo
 - Criando os dados de treinamento (criar um arquivo `training_data.json`)
 ```json
-{
-  "training_data": [
+[
     {
-      "text": "Preciso de segunda via do boleto",
-      "classes": ["Financeiro"]
+        "text": "Preciso de segunda via do boleto",
+        "labels": [
+            "Financeiro"
+        ]
     },
     {
-      "text": "Meu pagamento não foi confirmado",
-      "classes": ["Financeiro"]
+        "text": "Meu pagamento não foi confirmado",
+        "labels": [
+            "Financeiro"
+        ]
     },
     {
-      "text": "O sistema está apresentando erro 500",
-      "classes": ["Suporte Técnico"]
+        "text": "O sistema está apresentando erro 500",
+        "labels": [
+            "Suporte Técnico"
+        ]
     },
     {
-      "text": "Não consigo acessar minha conta",
-      "classes": ["Suporte Técnico"]
+        "text": "Não consigo acessar minha conta",
+        "labels": [
+            "Suporte Técnico"
+        ]
     },
     {
-      "text": "Quero saber o preço do plano premium",
-      "classes": ["Comercial"]
+        "text": "Quero saber o preço do plano premium",
+        "labels": [
+            "Comercial"
+        ]
     },
     {
-      "text": "Gostaria de contratar o serviço",
-      "classes": ["Comercial"]
+        "text": "Gostaria de contratar o serviço",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Quero uma cotação",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Gostaria de uma visita de um vendedor",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Preciso de uma demonstração do produto",
+        "labels": [
+            "Comercial"
+        ]
+    },
+    {
+        "text": "Preciso de uma ajuda com uma cotação",
+        "labels": [
+            "Comercial"
+        ]
     }
-  ]
-}
+]
 ```
 - Carregando os dados de treinamento
 ```python
