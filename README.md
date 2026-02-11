@@ -53,21 +53,33 @@ print(json.dumps(response, indent=2))
         ]
     },
     {
+        "text": "Posso pagar a vista?",
+        "labels": [
+            "Financeiro"
+        ]
+    },
+    {
+        "text": "Quero alterar a data de pagamento",
+        "labels": [
+            "Financeiro"
+        ]
+    },
+    {
         "text": "Meu pagamento não foi confirmado",
         "labels": [
             "Financeiro"
         ]
     },
     {
-        "text": "O sistema está apresentando erro 500",
+        "text": "Meu pagamento não foi confirmado",
         "labels": [
-            "Suporte Técnico"
+            "Financeiro"
         ]
     },
     {
-        "text": "Não consigo acessar minha conta",
+        "text": "Desejo quitar um débito",
         "labels": [
-            "Suporte Técnico"
+            "Financeiro"
         ]
     },
     {
