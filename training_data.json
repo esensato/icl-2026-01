@@ -1,0 +1,40 @@
+{
+    "training_data": [
+        {
+            "text": "Preciso de segunda via do boleto",
+            "classes": [
+                "Financeiro"
+            ]
+        },
+        {
+            "text": "Meu pagamento não foi confirmado",
+            "classes": [
+                "Financeiro"
+            ]
+        },
+        {
+            "text": "O sistema está apresentando erro 500",
+            "classes": [
+                "Suporte Técnico"
+            ]
+        },
+        {
+            "text": "Não consigo acessar minha conta",
+            "classes": [
+                "Suporte Técnico"
+            ]
+        },
+        {
+            "text": "Quero saber o preço do plano premium",
+            "classes": [
+                "Comercial"
+            ]
+        },
+        {
+            "text": "Gostaria de contratar o serviço",
+            "classes": [
+                "Comercial"
+            ]
+        }
+    ]
+}

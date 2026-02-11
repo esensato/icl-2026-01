@@ -14,72 +14,109 @@
    
 ### Uso NLU
 
-- Acesso via `postman`
-    - Utilizar a URL `https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/INSTANCE_ID/v1/analyze?version=2019-07-12`
-    - Autenticação deve ser `Basic Auth` onde `Username` deve ser `apikey` e `Password` a chave de API
-
-- Biblioteca `nodejs`
-    
-    [Bliblioteca Nodejs](https://www.npmjs.com/package/ibm-watson)
-
-- Instalar a biblioteca
-
-  ```nodejs
-  npm init -y
-  npm i --save ibm-watson
-  ```
-- Categorias
-
-```json
-    {
-        url: 'https://www.espm.br/',
-        features: {
-            categories: {}
-        }
-    }
+- Instalando as bibliotecas do *python*
+```bash
+pip install --upgrade "ibm-watson>=8.0.0"
 ```
-- Classificações
+- Analisando categorias a partir de uma *url*
+```python
+import json
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_watson.natural_language_understanding_v1 import Features, CategoriesOptions
 
+authenticator = IAMAuthenticator('{apikey}')
+natural_language_understanding = NaturalLanguageUnderstandingV1(
+    version='2022-04-07',
+    authenticator=authenticator
+)
+
+natural_language_understanding.set_service_url('{url}')
+
+response = natural_language_understanding.analyze(
+    url='www.ibm.com',
+    features=Features(categories=CategoriesOptions(limit=3))).get_result()
+
+print(json.dumps(response, indent=2))
+```
+- Ao invés de passar a `url` de um *site* como parâmetro pode-se informar um texto por meio de `text`
+- Outras formas de análise podem ser obtidas [aqui](https://cloud.ibm.com/apidocs/natural-language-understanding?code=python#features-examples)
+
+#### Treinando um modelo
+- Criando os dados de treinamento (criar um arquivo `training_data.json`)
 ```json
+{
+  "training_data": [
     {
-        text: 'I feel good today!',
-        features: {
-            classifications: { model: 'tone-classifications-en-v1' }
-        }
+      "text": "Preciso de segunda via do boleto",
+      "classes": ["Financeiro"]
+    },
+    {
+      "text": "Meu pagamento não foi confirmado",
+      "classes": ["Financeiro"]
+    },
+    {
+      "text": "O sistema está apresentando erro 500",
+      "classes": ["Suporte Técnico"]
+    },
+    {
+      "text": "Não consigo acessar minha conta",
+      "classes": ["Suporte Técnico"]
+    },
+    {
+      "text": "Quero saber o preço do plano premium",
+      "classes": ["Comercial"]
+    },
+    {
+      "text": "Gostaria de contratar o serviço",
+      "classes": ["Comercial"]
     }
+  ]
+}
+```
+- Carregando os dados de treinamento
+```python
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
+authenticator = IAMAuthenticator('{apikey}')
+nlu = NaturalLanguageUnderstandingV1(
+    version='2022-04-07',
+    authenticator=authenticator
+)
+nlu.set_service_url('{url}')
+
+with open('training_data.json', 'rb') as training_data:
+    model = nlu.create_classifications_model(
+        language='pt',
+        training_data=training_data,
+        training_data_content_type='application/json',
+        model_version='1.0.0',
+        name='MeuModelo',
+        training_parameters={"model_type": "single_label"}
+    ).get_result()
+
+print(model)
+```
+- Acompanhando o *status* do treinamento
+```python
+model_id = model['MeuModelo']
+status = nlu.get_classifications_model(model_id=model_id).get_result()
+print(status['status'])
 ```
 
-- Somente disponível para textos em inglês
+- Usando o modelo
+```python
+from ibm_watson.natural_language_understanding_v1 import Features, ClassificationsOptions
 
-    - excited: Mostrando entusiasmo e interesse pessoais
-    - frustrated: Sentindo-se incomodado e irritado
-    - impolite: Sendo desrespeitoso e rude
-    - polite: Exibindo um comportamento racional e orientado a objetivos
-    - sad: Uma emoção passiva desagradável
-    - satisfied: Uma resposta afetiva à qualidade do serviço percebida
-    - sympathetic: Um modo afetivo de compreensão que envolve ressonância emocional
+response = nlu.analyze(
+    text="Your new text to analyze",
+    features=Features(
+        classifications=ClassificationsOptions(model=model_id)
+    )
+).get_result()
 
-- Referêcia: [Análise de Tons](https://cloud.ibm.com/docs/natural-language-understanding?topic=natural-language-understanding-tone_analytics)
-
-- Conceitos
-```json
-    {
-        url: 'www.espm.br',
-        features: {
-            concepts: {}
-        }
-    }
-```
-- Entidades
-
-```json
-    {
-        text: 'Eu quero que o meu pedido entregue na cidade de São Paulo, na Rua Antonio da Silva, 123',
-        features: {
-            entities: {}
-        }
-
-    }
+print(response)
 ```
 
 ### Watson Assistant
