@@ -169,20 +169,77 @@ response = nlu.analyze(
 
 print(response)
 ```
+### Cloudant
+
+```bash
+pip install ibmcloudant
+```
+```python
+from ibmcloudant.cloudant_v1 import CloudantV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
+authenticator = IAMAuthenticator('{apikey}')
+service = CloudantV1(authenticator=authenticator)
+service.set_service_url('{url}')
+```
+
+```python
+response = service.get_server_information().get_result()
+print(response)
+```
+
+```python
+response = service.get_all_dbs().get_result()
+print(response)
+response = service.put_database(db='events', partitioned=False).get_result()
+response = service.delete_database(db='products').get_result()
+response = service.get_database_information(db='products').get_result()
+response = service.head_database(db='products')
+```
+
+```python
+import requests
+import json
+
+CLOUDANT_URL = "https://SUA_INSTANCIA.cloudantnosqldb.appdomain.cloud"
+DATABASE = "alunos"
+APIKEY = "SUA_APIKEY"
+
+with open("alunos.json", "r", encoding="utf-8") as f:
+    alunos = json.load(f)
+
+docs = {"docs": []}
+
+for i, aluno in enumerate(alunos, start=1):
+    aluno["_id"] = f"aluno_{i:03}"   # cria id automático
+    docs["docs"].append(aluno)
+
+response = requests.post(
+    f"{CLOUDANT_URL}/{DATABASE}/_bulk_docs",
+    auth=("apikey", APIKEY),
+    headers={"Content-Type": "application/json"},
+    data=json.dumps(docs)
+)
+
+print("Status:", response.status_code)
+print("Resposta:", response.json())
+```
+
+
 
 ### Watson Assistant
 - Permite a criação de **chatbots**
-#### Chatbot Secretaria Universidade
 - Efetuar login na [IBM Cloud](https://cloud.ibm.com)
 - Instanciar o serviço [Watson Assistant](https://cloud.ibm.com/catalog/services/watsonx-assistant)
-- Utilizar o [ChatGPT](https://chatgpt.com/) para gerar os textos
-- Criar uma `Persona` para o chatbot, por exemplo:
-    ```dotnetcli
-    Crie uma persona para um chatbot que auxilie alunos universitários da faculdade "Belo Diploma" 
-    nas questões como: obter nota, faltas, grade de aulas, etc... Essa persona deve ter um ótimo 
-    senso de humor e uma linguagem descontraída
+- Considerar o seguinte caso de uso:
+    - Crie um assistente que auxilie alunos a faculdade "Belo Diploma" a prestar informações de forma automatizada ao seu público alvo, constituído por:
+        - Alunos: uso do assistente para tarefas mais objetivas como verificar disciplicas matriculadas, notas, créditos concluídos, etc...
+        - Ex-alunos: interessados em saber quais são as novidades da faculdade, suas linhas de pesquisa para eventuais cursos de extensão
+        - Interessados nos cursos: alunos em potencial que desejam maiores detalhes sobre a instituição e seus cursos 
+    - O assistente deve prever integração com o sistema *back-end* da universidade para prestar as informações solicitadas (quando aplicado)
     ```
 - Criar o diálogo introdutório, o `On boarding`
+    - Actions -> Set by assistant -> Greet Customer
 - Adicionar 3 variações de resposta para quando a pergunta não for compreendida pelo Chatbot (escolhidas aleatoriamente)
     - Observar o `No matches count <= 3`;
 - Criar a primeira ação: "Verificar as disciplinas matriculadas";

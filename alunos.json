@@ -1,0 +1,304 @@
+{
+  "docs": [
+    {
+      "_id": "RM1000",
+      "nome": "Ana Souza",
+      "curso": "Administração de Empresas",
+      "creditos": 50
+    },
+    {
+      "_id": "RM1001",
+      "nome": "Carlos Lima",
+      "curso": "Ciência da Computação",
+      "creditos": 76
+    },
+    {
+      "_id": "RM1002",
+      "nome": "Mariana Alves",
+      "curso": "Ciência da Computação",
+      "creditos": 75
+    },
+    {
+      "_id": "RM1003",
+      "nome": "João Pedro Martins",
+      "curso": "Estatística",
+      "creditos": 76
+    },
+    {
+      "_id": "RM1004",
+      "nome": "Fernanda Rocha",
+      "curso": "Sistemas de Informação",
+      "creditos": 100
+    },
+    {
+      "_id": "RM1005",
+      "nome": "Lucas Oliveira",
+      "curso": "Administração de Empresas",
+      "creditos": 57
+    },
+    {
+      "_id": "RM1006",
+      "nome": "Beatriz Santos",
+      "curso": "Administração de Empresas",
+      "creditos": 98
+    },
+    {
+      "_id": "RM1007",
+      "nome": "Rafael Costa",
+      "curso": "Estatística",
+      "creditos": 98
+    },
+    {
+      "_id": "RM1008",
+      "nome": "Juliana Mendes",
+      "curso": "Administração de Empresas",
+      "creditos": 45
+    },
+    {
+      "_id": "RM1009",
+      "nome": "Gabriel Ferreira",
+      "curso": "Estatística",
+      "creditos": 70
+    },
+    {
+      "_id": "RM1010",
+      "nome": "Camila Ribeiro",
+      "curso": "Sistemas de Informação",
+      "creditos": 76
+    },
+    {
+      "_id": "RM1011",
+      "nome": "Thiago Moreira",
+      "curso": "Administração de Empresas",
+      "creditos": 44
+    },
+    {
+      "_id": "RM1012",
+      "nome": "Larissa Barbosa",
+      "curso": "Estatística",
+      "creditos": 56
+    },
+    {
+      "_id": "RM1013",
+      "nome": "Felipe Cardoso",
+      "curso": "Ciência da Computação",
+      "creditos": 64
+    },
+    {
+      "_id": "RM1014",
+      "nome": "Patrícia Gomes",
+      "curso": "Administração de Empresas",
+      "creditos": 89
+    },
+    {
+      "_id": "RM1015",
+      "nome": "Rodrigo Nunes",
+      "curso": "Ciência da Computação",
+      "creditos": 61
+    },
+    {
+      "_id": "RM1016",
+      "nome": "Isabela Teixeira",
+      "curso": "Ciência da Computação",
+      "creditos": 60
+    },
+    {
+      "_id": "RM1017",
+      "nome": "Bruno Carvalho",
+      "curso": "Estatística",
+      "creditos": 61
+    },
+    {
+      "_id": "RM1018",
+      "nome": "Natália Araújo",
+      "curso": "Ciência da Computação",
+      "creditos": 59
+    },
+    {
+      "_id": "RM1019",
+      "nome": "Eduardo Melo",
+      "curso": "Sistemas de Informação",
+      "creditos": 83
+    },
+    {
+      "_id": "RM1020",
+      "nome": "Vanessa Batista",
+      "curso": "Estatística",
+      "creditos": 84
+    },
+    {
+      "_id": "RM1021",
+      "nome": "Leonardo Freitas",
+      "curso": "Estatística",
+      "creditos": 56
+    },
+    {
+      "_id": "RM1022",
+      "nome": "Aline Monteiro",
+      "curso": "Estatística",
+      "creditos": 90
+    },
+    {
+      "_id": "RM1023",
+      "nome": "Matheus Pinto",
+      "curso": "Administração de Empresas",
+      "creditos": 59
+    },
+    {
+      "_id": "RM1024",
+      "nome": "Gabriela Dias",
+      "curso": "Estatística",
+      "creditos": 49
+    },
+    {
+      "_id": "RM1025",
+      "nome": "Vinícius Lopes",
+      "curso": "Administração de Empresas",
+      "creditos": 57
+    },
+    {
+      "_id": "RM1026",
+      "nome": "Tatiane Martins",
+      "curso": "Sistemas de Informação",
+      "creditos": 53
+    },
+    {
+      "_id": "RM1027",
+      "nome": "Renato Alves",
+      "curso": "Sistemas de Informação",
+      "creditos": 79
+    },
+    {
+      "_id": "RM1028",
+      "nome": "Letícia Fernandes",
+      "curso": "Sistemas de Informação",
+      "creditos": 90
+    },
+    {
+      "_id": "RM1029",
+      "nome": "André Silva",
+      "curso": "Ciência da Computação",
+      "creditos": 78
+    },
+    {
+      "_id": "RM1030",
+      "nome": "Paula Correia",
+      "curso": "Estatística",
+      "creditos": 41
+    },
+    {
+      "_id": "RM1031",
+      "nome": "Marcelo Andrade",
+      "curso": "Ciência da Computação",
+      "creditos": 52
+    },
+    {
+      "_id": "RM1032",
+      "nome": "Julio Cesar Ramos",
+      "curso": "Estatística",
+      "creditos": 53
+    },
+    {
+      "_id": "RM1033",
+      "nome": "Débora Farias",
+      "curso": "Ciência da Computação",
+      "creditos": 94
+    },
+    {
+      "_id": "RM1034",
+      "nome": "Ricardo Duarte",
+      "curso": "Administração de Empresas",
+      "creditos": 63
+    },
+    {
+      "_id": "RM1035",
+      "nome": "Sabrina Castro",
+      "curso": "Administração de Empresas",
+      "creditos": 74
+    },
+    {
+      "_id": "RM1036",
+      "nome": "Daniela Moraes",
+      "curso": "Sistemas de Informação",
+      "creditos": 92
+    },
+    {
+      "_id": "RM1037",
+      "nome": "Henrique Tavares",
+      "curso": "Administração de Empresas",
+      "creditos": 92
+    },
+    {
+      "_id": "RM1038",
+      "nome": "Carolina Rezende",
+      "curso": "Administração de Empresas",
+      "creditos": 44
+    },
+    {
+      "_id": "RM1039",
+      "nome": "Gustavo Barros",
+      "curso": "Estatística",
+      "creditos": 54
+    },
+    {
+      "_id": "RM1040",
+      "nome": "Michele Pires",
+      "curso": "Sistemas de Informação",
+      "creditos": 45
+    },
+    {
+      "_id": "RM1041",
+      "nome": "Fábio Queiroz",
+      "curso": "Ciência da Computação",
+      "creditos": 69
+    },
+    {
+      "_id": "RM1042",
+      "nome": "Priscila Neves",
+      "curso": "Ciência da Computação",
+      "creditos": 71
+    },
+    {
+      "_id": "RM1043",
+      "nome": "Alexandre Coelho",
+      "curso": "Estatística",
+      "creditos": 97
+    },
+    {
+      "_id": "RM1044",
+      "nome": "Simone Antunes",
+      "curso": "Ciência da Computação",
+      "creditos": 40
+    },
+    {
+      "_id": "RM1045",
+      "nome": "Diego Campos",
+      "curso": "Sistemas de Informação",
+      "creditos": 78
+    },
+    {
+      "_id": "RM1046",
+      "nome": "Cristiane Lima",
+      "curso": "Ciência da Computação",
+      "creditos": 72
+    },
+    {
+      "_id": "RM1047",
+      "nome": "Pedro Henrique Souza",
+      "curso": "Sistemas de Informação",
+      "creditos": 58
+    },
+    {
+      "_id": "RM1048",
+      "nome": "Amanda Cavalcante",
+      "curso": "Administração de Empresas",
+      "creditos": 95
+    },
+    {
+      "_id": "RM1049",
+      "nome": "Tiago Fernandes",
+      "curso": "Administração de Empresas",
+      "creditos": 87
+    }
+  ]
+}
