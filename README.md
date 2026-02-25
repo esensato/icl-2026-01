@@ -253,13 +253,13 @@ print(response)
 - Criar uma ação personalizada para saber o nome do aluno
 - Criar variáveis de sessão:
 
-    <div style="width:100px">
+    <div style="width:50px">
     <img src="img/img2.png" style="width:100%; height:auto;">
     </div>
 
 #### Integração com o sistema da universidade
 - Realizar a integração com a base de dados **Cloudant**
-<div style="width:100px; height:100px;">
+<div style="width:50px;">
 <img src="img/img3.png" style="width:100%; height:auto;">
 </div>
 
