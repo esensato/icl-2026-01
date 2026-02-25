@@ -246,11 +246,10 @@ print(response)
         - Ex-alunos: interessados em saber quais são as novidades da faculdade, suas linhas de pesquisa para eventuais cursos de extensão
         - Interessados nos cursos: alunos em potencial que desejam maiores detalhes sobre a instituição e seus cursos 
     - O assistente deve prever integração com o sistema *back-end* da universidade para prestar as informações solicitadas (quando aplicado)
-    ```
 - Criar o diálogo introdutório, o `On boarding`
-    - Actions -> Set by assistant -> Greet Customer
+    - Actions -> Set by assistant -> Greet customer
 - Adicionar 3 variações de resposta para quando a pergunta não for compreendida pelo Chatbot (escolhidas aleatoriamente)
-    - Observar o `No matches count <= 3`;
+    - Actions -> Set by assistant -> No matches
 - Criar a primeira ação: "Verificar as disciplinas matriculadas";
     - Aluno deve infomar o número de matrícula;
     - O diálogo deve informar "Estou pesquisando sua matrícula `numero_da_matricula`";
@@ -267,10 +266,6 @@ print(response)
 <div style="width:100px; height:100px">
 <img src="img/img3.png">
 </div>
-
-- Acessar o `endpoint` para obter a lista de disciplinas
-
-    `https://sistema-universitario.glitch.me/grade/1000`
 
 - Formato `OpenAPI`
 ```json
