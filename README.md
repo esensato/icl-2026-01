@@ -15,10 +15,7 @@
 ### Acesso IBM Console
 - Acessar a url `https://cloud.ibm.com/`
 ### Uso NLU
-
-- Chave de API - lK4mC2Ydi38JMD92Ng1kD7K71zLfG14Sks22OxvG-jCp
-- URL - https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/f3dd6fa0-fd00-43c7-b8f5-dea520cc7ce7
-
+- [Referência API](https://cloud.ibm.com/apidocs/natural-language-understanding)
 - Acessar o [Google Colab](https://colab.research.google.com/)
 - Instalando as bibliotecas do *python*
 ```bash
@@ -339,13 +336,10 @@ print(response)
   }
 }
 ```
-- Desenvolver um diálogo para que o aluno possa solicitar a nota de uma disciplina informando o número de matrícula e a descrição da disciplina
-
-    `https://sistema-universitario.glitch.me/nota/1000/Estrutura de Dados`
-
-- Desenvolver um diálogo para que o aluno possa consultar a sala de aula de uma disciplina
-
-    `https://sistema-universitario.glitch.me/sala/Estrutura de Dados`
+#### Exercícios
+- Implementar novos diálogos:
+    - Permitir que o aluno consulte os seus créditos
+    - Permitir que o aluno deixe algum recado escrito (dúvidas, críticas, elogios, sugestões, etc...) para a secretaria
 
 ### Personalizando o chatbot
 - Instalar em uma página HTML
