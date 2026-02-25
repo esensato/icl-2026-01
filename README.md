@@ -253,14 +253,21 @@ print(response)
 - Criar uma ação personalizada para saber o nome do aluno
 - Criar variáveis de sessão:
 
-    <div style="width:50px">
-    <img src="img/img2.png" style="width:100%; height:auto;">
-    </div>
+<div style="width:50px">
+<img src="img/img2.png" style="width:100%; height:auto;">
+</div>
 
 #### Integração com o sistema da universidade
 - Realizar a integração com a base de dados **Cloudant**
+- 
 <div style="width:50px;">
 <img src="img/img3.png" style="width:100%; height:auto;">
+</div>
+
+- Criar uma integração personalizada
+
+<div style="width:100px; height:100px">
+<img src="img/img4.png" style="width:100%; height:auto;>
 </div>
 
 - Formato `OpenAPI`
@@ -332,11 +339,6 @@ print(response)
   }
 }
 ```
-
-<div style="width:100px; height:100px">
-<img src="img/img4.png">
-</div>
-
 - Desenvolver um diálogo para que o aluno possa solicitar a nota de uma disciplina informando o número de matrícula e a descrição da disciplina
 
     `https://sistema-universitario.glitch.me/nota/1000/Estrutura de Dados`
