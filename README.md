@@ -155,7 +155,6 @@ print(model)
 status = nlu.get_classifications_model(model_id=model_id).get_result()
 print(status['status'])
 ```
-
 - Usando o modelo
 ```python
 from ibm_watson.natural_language_understanding_v1 import Features, ClassificationsOptions
@@ -170,10 +169,13 @@ response = nlu.analyze(
 print(response)
 ```
 ### Cloudant
-
+- Banco de dados nSQL baseado em documento criado a partir do [Apache Couch Db](https://couchdb.apache.org/)
+- [Referência API](https://cloud.ibm.com/apidocs/cloudant)
+- Instalar pacote de integração com **Python**
 ```bash
 pip install ibmcloudant
 ```
+- Efetuar a conexão (trocar a `{apikey}` e `{url}`)
 ```python
 from ibmcloudant.cloudant_v1 import CloudantV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -182,50 +184,57 @@ authenticator = IAMAuthenticator('{apikey}')
 service = CloudantV1(authenticator=authenticator)
 service.set_service_url('{url}')
 ```
-
+- Obter informações gerais do servidor (validar conexão)
 ```python
 response = service.get_server_information().get_result()
 print(response)
 ```
-
+- Operações comuns
 ```python
 response = service.get_all_dbs().get_result()
 print(response)
-response = service.put_database(db='events', partitioned=False).get_result()
-response = service.delete_database(db='products').get_result()
-response = service.get_database_information(db='products').get_result()
-response = service.head_database(db='products')
+
+response = service.put_database(db='alunos', partitioned=False).get_result()
+print(response)
+
+response = service.get_database_information(db='alunos').get_result()
+print(response)
+
+aluno_doc = Document(
+    _id="RM1002",
+    nome="Mariana Alves",
+    curso="Ciência da Computação",
+    creditos=75)
+    
+response = service.post_document(db='alunos', document=aluno_doc).get_result()
+print(response)
+
+response = service.head_database(db='alunos')
+print(response)
 ```
-
+- Efetuar carga de documentos em lote
 ```python
-import requests
 import json
-
-CLOUDANT_URL = "https://SUA_INSTANCIA.cloudantnosqldb.appdomain.cloud"
-DATABASE = "alunos"
-APIKEY = "SUA_APIKEY"
 
 with open("alunos.json", "r", encoding="utf-8") as f:
     alunos = json.load(f)
 
-docs = {"docs": []}
+response = service.post_bulk_docs(
+  db='alunos',
+  bulk_docs=alunos
+).get_result()
 
-for i, aluno in enumerate(alunos, start=1):
-    aluno["_id"] = f"aluno_{i:03}"   # cria id automático
-    docs["docs"].append(aluno)
-
-response = requests.post(
-    f"{CLOUDANT_URL}/{DATABASE}/_bulk_docs",
-    auth=("apikey", APIKEY),
-    headers={"Content-Type": "application/json"},
-    data=json.dumps(docs)
-)
-
-print("Status:", response.status_code)
-print("Resposta:", response.json())
+print(response)
 ```
+- Pesquisar um documento específico
+```python
+response = service.get_document(
+  db='alunos',
+  doc_id='RM1002'
+).get_result()
 
-
+print(response)
+```
 
 ### Watson Assistant
 - Permite a criação de **chatbots**
@@ -264,8 +273,73 @@ print("Resposta:", response.json())
     `https://sistema-universitario.glitch.me/grade/1000`
 
 - Formato `OpenAPI`
-```
-Gere um json no formato OpenAPI para o endpoint https://sistema-universitario.glitch.me/grade/:matricula onde :matricula corresponde à matrícula do aluno. O endpoint retorna um JSON no formato {aluno: "nome do aulo", disciplinas: ["disciplina1", "disciplina2"]}
+```json
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Cloudant Alunos API",
+    "description": "API para consulta de documentos na base alunos do IBM Cloudant",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://~replace-with-cloudant-host~.cloudantnosqldb.appdomain.cloud"
+    }
+  ],
+  "paths": {
+    "/alunos/_id:{id}": {
+      "get": {
+        "summary": "Buscar aluno por ID",
+        "description": "Retorna um documento da base alunos a partir do _id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Identificador do aluno",
+            "schema": {
+              "type": "string",
+              "example": "1000042"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Documento encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Documento não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
 ```
 
 <div style="width:100px; height:100px">
