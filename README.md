@@ -250,19 +250,15 @@ print(response)
     - Actions -> Set by assistant -> Greet customer
 - Adicionar 3 variações de resposta para quando a pergunta não for compreendida pelo Chatbot (escolhidas aleatoriamente)
     - Actions -> Set by assistant -> No matches
-- Criar a primeira ação: "Verificar as disciplinas matriculadas";
-    - Aluno deve infomar o número de matrícula;
-    - O diálogo deve informar "Estou pesquisando sua matrícula `numero_da_matricula`";
-    - Criar uma variável de sessão para armazenar o número de matrícula do aluno;
-    - Ao final, informar a grade de disciplinas e o nome do aluno (sempre o mesmo)
-- Variáveis de sessão:
+- Criar uma ação personalizada para saber o nome do aluno
+- Criar variáveis de sessão:
 
-    <div style="width:100px; height:100px">
+    <div style="width:200px">
     <img src="img/img2.png">
     </div>
 
 #### Integração com o sistema da universidade
-
+- Realizar a integração com a base de dados **Cloudant**
 <div style="width:100px; height:100px">
 <img src="img/img3.png">
 </div>
