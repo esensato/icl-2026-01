@@ -1,0 +1,99 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Cloudant Alunos API",
+        "description": "API para consulta de documentos da base alunos no IBM Cloudant",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://950510c3-152c-40f8-ac82-5d9d16b029ec-bluemix.cloudantnosqldb.appdomain.cloud"
+        }
+    ],
+    "paths": {
+        "/alunos/{id}": {
+            "get": {
+                "summary": "Buscar aluno por ID",
+                "description": "Retorna um documento da base alunos a partir do _id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Identificador do aluno (ex: RM1001)",
+                        "schema": {
+                            "type": "string",
+                            "example": "RM1001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Aluno"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado"
+                    },
+                    "404": {
+                        "description": "Documento não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Aluno": {
+                "type": "object",
+                "required": [
+                    "_id",
+                    "_rev",
+                    "nome",
+                    "curso",
+                    "creditos"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "RM1001"
+                    },
+                    "_rev": {
+                        "type": "string",
+                        "example": "1-98802ed367e5a62f44ed7d1c1e653f52"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Carlos Lima"
+                    },
+                    "curso": {
+                        "type": "string",
+                        "example": "Ciência da Computação"
+                    },
+                    "creditos": {
+                        "type": "integer",
+                        "example": 76
+                    }
+                }
+            }
+        }
+    }
+}
