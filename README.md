@@ -217,6 +217,10 @@ print(response)
 response = service.head_database(db='alunos')
 print(response)
 ```
+- Obter o arquivo de alunos
+```bash
+!wget https://github.com/esensato/icl-2026-01/raw/refs/heads/main/alunos.json
+```
 - Efetuar carga de documentos em lote
 ```python
 import json
