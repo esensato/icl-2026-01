@@ -29,10 +29,13 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, CategoriesOptions
 
 authenticator = IAMAuthenticator('{apikey}')
+
 nlu = NaturalLanguageUnderstandingV1(
     version='2022-04-07',
     authenticator=authenticator
 )
+
+nlu.set_disable_ssl_verification(True)
 
 nlu.set_service_url('{url}')
 
@@ -133,6 +136,9 @@ nlu = NaturalLanguageUnderstandingV1(
     version='2022-04-07',
     authenticator=authenticator
 )
+
+nlu.set_disable_ssl_verification(True)
+
 nlu.set_service_url('{url}')
 
 with open('training_data.json', 'rb') as training_data:
@@ -174,7 +180,7 @@ pip install ibmcloudant
 ```
 - Efetuar a conexão (trocar a `{apikey}` e `{url}`)
 ```python
-from ibmcloudant.cloudant_v1 import CloudantV1
+from ibmcloudant.cloudant_v1 import Cloudan
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 authenticator = IAMAuthenticator('{apikey}')
@@ -196,6 +202,8 @@ print(response)
 
 response = service.get_database_information(db='alunos').get_result()
 print(response)
+
+from ibmcloudant.cloudant_v1 import Document
 
 aluno_doc = Document(
     _id="RM1002",
