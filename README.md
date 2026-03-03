@@ -457,3 +457,57 @@ print(response)
 
         }
     ```
+### Deploy End-Point Teste
+- Instalar o *plugn* para o **IBM Code Engine**
+```bash
+ibmcloud plugin install code-engine
+```
+- Criar uma pasta para o projeto
+```bash
+mkdir ce-teste
+cd cce-teste
+```
+- Dentro da pasta `ce-hello-world` criar o código **NodeJs** em um arquivo `app.js`
+```javascript
+const express = require('express');
+const app = express();
+
+app.get('/teste', (req, res) => {
+  res.json({ message: 'Funcionou!!!' });
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`App running on port ${port}`);
+});
+```
+- Iniciar o projeto **NodeJS**
+```bash
+npm init -y
+npm install express --save
+```
+- Editar o arquivo gerado `package.json` para incluir
+```json
+"scripts": {
+  "start": "node app.js"
+}
+```
+- Criar o projeto no **IBM Code Engine**
+```bash
+ibmcloud ce project create --name projeto-hello
+ibmcloud ce project select --name projeto-hello
+ibmcloud ce project current
+```
+- Efetuar o *deploy* (de dentro da pasta ``)
+```bash
+ibmcloud ce application create \
+  --name hello-node \
+  --build-source . \
+  --port 3000 \
+  --cpu 0.25 \
+  --memory 0.5G
+```
+- Obter a URL pública da aplicação
+```bash
+ibmcloud ce application get --name hello-node
+```
