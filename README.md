@@ -465,7 +465,7 @@ ibmcloud plugin install code-engine
 - Criar uma pasta para o projeto
 ```bash
 mkdir ce-teste
-cd cce-teste
+cd ce-teste
 ```
 - Dentro da pasta `ce-hello-world` criar o código **NodeJs** em um arquivo `app.js`
 ```javascript
