@@ -1,0 +1,107 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Db2 SQL Jobs API",
+        "version": "1.0.0",
+        "description": "API para submissão de comandos SQL assíncronos no Db2 on Cloud."
+    },
+    "servers": [
+        {
+            "url": "https://bpe61bfd0365e9u4psdglite.db2.cloud.ibm.com",
+            "variables": {
+                "HOSTNAME": {
+                    "default": "example.db2.cloud.ibm.com"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/dbapi/v4/sql_jobs": {
+            "post": {
+                "summary": "Submeter Job SQL",
+                "operationId": "submitSqlJob",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "description": "Token Bearer de autenticação.",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                    },
+                    {
+                        "name": "x-deployment-id",
+                        "in": "header",
+                        "required": true,
+                        "description": "Identificador do deployment do serviço.",
+                        "schema": {
+                            "type": "string",
+                            "example": "zzz"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "commands"
+                                ],
+                                "properties": {
+                                    "commands": {
+                                        "type": "string",
+                                        "example": "select TABNAME, TABSCHEMA, OWNER from syscat.tables fetch first 5 rows only;"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "separator": {
+                                        "type": "string",
+                                        "example": ";"
+                                    },
+                                    "stop_on_error": {
+                                        "type": "string",
+                                        "enum": [
+                                            "yes",
+                                            "no"
+                                        ],
+                                        "example": "no"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Job criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "1234567890abcdef"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    },
+                    "401": {
+                        "description": "Não autorizado"
+                    }
+                }
+            }
+        }
+    }
+}
