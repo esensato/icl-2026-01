@@ -458,6 +458,7 @@ print(response)
         }
     ```
 ### Conectar DB2
+- Para referência à API clicar [aqui](https://cloud.ibm.com/apidocs/db2-on-cloud/db2-on-cloud-v4)
 - Definir as variáveis para a obter o token de conexão
 ```python
 url = ""
