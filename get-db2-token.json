@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Db2 Authentication API",
+    "version": "1.0.0",
+    "description": "API para obtenção de token de autenticação no Db2 on Cloud."
+  },
+  "servers": [
+    {
+      "url": "https://bpe61bfd0365e9u4psdglite.db2.cloud.ibm.com"
+    }
+  ],
+  "paths": {
+    "/dbapi/v4/auth/tokens": {
+      "post": {
+        "summary": "Obter token de autenticação",
+        "description": "Autentica usuário no Db2 e retorna token de acesso.",
+        "operationId": "getAuthToken",
+        "parameters": [
+          {
+            "name": "x-deployment-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Identificador do deployment do serviço."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userid", "password"],
+                "properties": {
+                  "userid": {
+                    "type": "string",
+                    "example": "xxx"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "yyy"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userid": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "XXXXXX"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    }
+  }
+}
