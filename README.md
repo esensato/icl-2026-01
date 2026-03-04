@@ -457,57 +457,28 @@ print(response)
 
         }
     ```
-### Deploy End-Point Teste
-- Instalar o *plugn* para o **IBM Code Engine**
+### Interface CLI
+- Efetuar o [download](https://cloud.ibm.com/docs/cli) conforme a plataforma
+- Obter a **chave de API**
+    - Menu (superior) Gerenciar -> Acesso (IAM) -> Chaves de API -> Botão Criar
+- Efetuar login com a chave de acesso
 ```bash
-ibmcloud plugin install code-engine
+ibmcloud login --apikey <CHAVE_API_CRIADA>
+ibmcloud target -g Default
 ```
-- Criar uma pasta para o projeto
+- Listar os *plugins* disponíveis
 ```bash
-mkdir ce-teste
-cd ce-teste
+ibmcloud plugin repo-plugins
 ```
-- Dentro da pasta `ce-hello-world` criar o código **NodeJs** em um arquivo `app.js`
-```javascript
-const express = require('express');
-const app = express();
-
-app.get('/teste', (req, res) => {
-  res.json({ message: 'Funcionou!!!' });
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
-```
-- Iniciar o projeto **NodeJS**
+- Instalar um *plugin* (`cdb`)
 ```bash
-npm init -y
-npm install express --save
+ibmcloud plugin install cloud-databases
 ```
-- Editar o arquivo gerado `package.json` para incluir
-```json
-"scripts": {
-  "start": "node app.js"
-}
-```
-- Criar o projeto no **IBM Code Engine**
+- Listar as instâncias já criadas de banco de dados
 ```bash
-ibmcloud ce project create --name projeto-hello
-ibmcloud ce project select --name projeto-hello
-ibmcloud ce project current
+ibmcloud cdb ls
 ```
-- Efetuar o *deploy* (de dentro da pasta ``)
+- Criar uma instância de banco de dados relacional **DB2**
 ```bash
-ibmcloud ce application create \
-  --name hello-node \
-  --build-source . \
-  --port 3000 \
-  --cpu 0.25 \
-  --memory 0.5G
-```
-- Obter a URL pública da aplicação
-```bash
-ibmcloud ce application get --name hello-node
+ibmcloud cdb create universidade-db2 db2 standard us-south
 ```
