@@ -457,28 +457,84 @@ print(response)
 
         }
     ```
-### Interface CLI
-- Efetuar o [download](https://cloud.ibm.com/docs/cli) conforme a plataforma
-- Obter a **chave de API**
-    - Menu (superior) Gerenciar -> Acesso (IAM) -> Chaves de API -> Botão Criar
-- Efetuar login com a chave de acesso
-```bash
-ibmcloud login --apikey <CHAVE_API_CRIADA>
-ibmcloud target -g Default
+### Conectar DB2
+- Definir as variáveis para a obter o token de conexão
+```python
+url = ""
+userid = ""
+password = ""
+deployment_id = ""
 ```
-- Listar os *plugins* disponíveis
-```bash
-ibmcloud plugin repo-plugins
+- Obter o token
+```python
+import http.client
+import ssl
+import json
+
+context = ssl._create_unverified_context()
+
+conn = http.client.HTTPSConnection(url, context=context)
+
+payload = {"userid":userid,"password":password}
+
+headers = {
+    'content-type': "application/json",
+    'x-deployment-id': deployment_id
+    }
+
+conn.request("POST", "/dbapi/v4/auth/tokens", json.dumps(payload), headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(json.loads(data.decode("utf-8"))["token"])
 ```
-- Instalar um *plugin* (`cdb`)
-```bash
-ibmcloud plugin install cloud-databases
+- Armazenar o *token* em uma variável
+- Efetuar uma consulta *SQL* ao banco de dados e obter o `id` da execução (assíncrona)
+```python
+import http.client
+import ssl
+import json
+
+context = ssl._create_unverified_context()
+
+conn = http.client.HTTPSConnection(url, context=context)
+
+payload = {"commands":"select * from disciplinas", "separator":";","stop_on_error":"no"}
+
+headers = {
+    'content-type': "application/json",
+    'authorization': f"Bearer {token}",
+     'x-deployment-id': deployment_id
+}
+
+conn.request("POST", "/dbapi/v4/sql_jobs", json.dumps(payload), headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(json.loads(data.decode("utf-8"))["id"])
 ```
-- Listar as instâncias já criadas de banco de dados
+- Obter o restulado final da execução (atualizar o `id`)
 ```bash
-ibmcloud cdb ls
-```
-- Criar uma instância de banco de dados relacional **DB2**
-```bash
-ibmcloud cdb create universidade-db2 db2 standard us-south
+import http.client
+import ssl
+import json
+
+context = ssl._create_unverified_context()
+
+conn = http.client.HTTPSConnection(url, context=context)
+
+headers = {
+    'content-type': "application/json",
+    'authorization': f"Bearer {token}",
+     'x-deployment-id': deployment_id
+}
+
+conn.request("GET", f"/dbapi/v4/sql_jobs/1772644599186_733471460", headers=headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
 ```
