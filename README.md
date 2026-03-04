@@ -279,7 +279,7 @@ print(response)
 <img src="img/img4.png" style="width:100%; height:auto;>
 </div>
 
-- Formato `OpenAPI`
+- Formato `OpenAPI` - podem ser visualizados [aqui](https://editor.swagger.io/)
 ```json
 {
   "openapi": "3.0.3",
