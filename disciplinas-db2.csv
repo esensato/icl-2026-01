@@ -1,0 +1,33 @@
+nome_disciplina,semestre,creditos
+Algoritmos e Lógica de Programação,1,4
+Fundamentos de Sistemas de Informação,1,4
+Matemática Discreta,1,4
+Introdução à Computação,1,2
+Programação Orientada a Objetos,2,6
+Arquitetura de Computadores,2,4
+Engenharia de Software I,2,4
+Banco de Dados I,2,4
+Estruturas de Dados,3,6
+Sistemas Operacionais,3,4
+Análise e Projeto de Sistemas,3,4
+Probabilidade e Estatística,3,2
+Banco de Dados II,4,4
+Redes de Computadores,4,6
+Engenharia de Software II,4,4
+Interação Humano-Computador,4,2
+Desenvolvimento Web I,5,4
+Computação em Nuvem,5,4
+Segurança da Informação,5,6
+Governança de TI,5,2
+Desenvolvimento Mobile,6,4
+Inteligência Artificial,6,6
+Sistemas Distribuídos,6,4
+Gestão de Projetos de TI,6,2
+Big Data e Analytics,7,4
+Mineração de Dados,7,4
+Internet das Coisas,7,6
+Empreendedorismo em Tecnologia,7,2
+Arquitetura de Software,8,4
+Auditoria e Perícia em TI,8,4
+Tópicos Avançados em Sistemas de Informação,8,6
+Trabalho de Conclusão de Curso,8,6
