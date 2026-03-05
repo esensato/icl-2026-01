@@ -244,6 +244,10 @@ response = service.get_document(
 
 print(response)
 ```
+- Obter o **token** de acesso
+```bash
+!curl -X POST 'https://iam.cloud.ibm.com/identity/token' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=<CHAVE_API_CLOUDANT>'
+```
 
 ### Watson Assistant
 - Permite a criação de **chatbots**
