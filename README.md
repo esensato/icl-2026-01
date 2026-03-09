@@ -470,7 +470,7 @@ userid = ""
 password = ""
 deployment_id = ""
 ```
-- Obter o token
+- Obter o token (exemplo em *python*)
 ```python
 import http.client
 import ssl
@@ -493,6 +493,88 @@ res = conn.getresponse()
 data = res.read()
 
 print(json.loads(data.decode("utf-8"))["token"])
+```
+- Obter o token (exemplo [OpenAPI](https://editor.swagger.io/))
+- Trocar `"url": "https://{HOSTNAME}"` pelo *hostname* fornecido nas credencias do DB2 criado na cloud
+```json
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DB API Authentication",
+    "version": "1.0.0",
+    "description": "Endpoint para autenticação e geração de token."
+  },
+  "servers": [
+    {
+      "url": "https://{HOSTNAME}"
+    }
+  ],
+  "paths": {
+    "/dbapi/v4/auth/tokens": {
+      "post": {
+        "summary": "Generate authentication token",
+        "operationId": "generateAuthToken",
+        "parameters": [
+          {
+            "name": "x-deployment-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Deployment identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userid",
+                  "password"
+                ],
+                "properties": {
+                  "userid": {
+                    "type": "string",
+                    "example": "user123"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "mypassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication token generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userid": {
+                      "type": "string",
+                      "example": "user123"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 ```
 - Armazenar o *token* em uma variável
 - Efetuar uma consulta *SQL* ao banco de dados e obter o `id` da execução (assíncrona)
