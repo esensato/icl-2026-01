@@ -494,7 +494,11 @@ data = res.read()
 
 print(json.loads(data.decode("utf-8"))["token"])
 ```
-- Obter o token (exemplo [OpenAPI](https://editor.swagger.io/))
+- Criar as seguintes variáveis de sessão:
+    - `DB2_DEPLOYMENT_ID`
+    - `DB2_USERNAME`
+    - `DB2_PASSWORD`
+- Obter o token por meio da especificaçao *OpenAPI* abaixo
 - Trocar `"url": "https://{HOSTNAME}"` pelo *hostname* fornecido nas credencias do DB2 criado na cloud
 ```json
 {
