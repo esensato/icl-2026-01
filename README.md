@@ -499,7 +499,7 @@ print(json.loads(data.decode("utf-8"))["token"])
     - `DB2_USERNAME`
     - `DB2_PASSWORD`
     - `DB2_TOKEN`: inicialmente vazia pois irá armazenar o *token* gerado para acesso ao banco de dados
-- Obter o token por meio da especificaçao *OpenAPI* abaixo
+- Obter o token por meio da especificação *OpenAPI* abaixo
 - Trocar `"url": "https://{HOSTNAME}"` pelo *hostname* fornecido nas credencias do DB2 criado na cloud
 - O `HOSTNAME` deve ser obtido do parâmetro **Nome do host da API de REST** que fica na guia **Conexões** dentro do banco de dados Db2 criado na **IBM Cloud**
 ```json
@@ -607,6 +607,116 @@ res = conn.getresponse()
 data = res.read()
 
 print(json.loads(data.decode("utf-8"))["id"])
+```
+- Exemplo especificação *OpenAPI*
+```json
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Db2 SQL Jobs API",
+        "version": "1.0.0",
+        "description": "API para submissão de comandos SQL assíncronos no Db2 on Cloud."
+    },
+    "servers": [
+        {
+            "url": "https://{HOSTNAME}",
+            "variables": {
+                "HOSTNAME": {
+                    "default": "example.db2.cloud.ibm.com"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/dbapi/v4/sql_jobs": {
+            "post": {
+                "summary": "Submeter Job SQL",
+                "operationId": "submitSqlJob",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "description": "Token Bearer de autenticação.",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                    },
+                    {
+                        "name": "x-deployment-id",
+                        "in": "header",
+                        "required": true,
+                        "description": "Identificador do deployment do serviço.",
+                        "schema": {
+                            "type": "string",
+                            "example": "zzz"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "commands"
+                                ],
+                                "properties": {
+                                    "commands": {
+                                        "type": "string",
+                                        "example": "select * FROM DISCIPLINAS"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "separator": {
+                                        "type": "string",
+                                        "example": ";"
+                                    },
+                                    "stop_on_error": {
+                                        "type": "string",
+                                        "enum": [
+                                            "yes",
+                                            "no"
+                                        ],
+                                        "example": "no"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Job criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "1234567890abcdef"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    },
+                    "401": {
+                        "description": "Não autorizado"
+                    }
+                }
+            }
+        }
+    }
+}
 ```
 - Obter o restulado final da execução (atualizar o `id`)
 ```bash
