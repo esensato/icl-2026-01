@@ -498,6 +498,7 @@ print(json.loads(data.decode("utf-8"))["token"])
     - `DB2_DEPLOYMENT_ID`
     - `DB2_USERNAME`
     - `DB2_PASSWORD`
+    - `DB2_TOKEN`: inicialmente vazia pois irá armazenar o *token* gerado para acesso ao banco de dados
 - Obter o token por meio da especificaçao *OpenAPI* abaixo
 - Trocar `"url": "https://{HOSTNAME}"` pelo *hostname* fornecido nas credencias do DB2 criado na cloud
 - O `HOSTNAME` deve ser obtido do parâmetro **Nome do host da API de REST** que fica na guia **Conexões** dentro do banco de dados Db2 criado na **IBM Cloud**
