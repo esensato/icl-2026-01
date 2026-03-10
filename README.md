@@ -539,7 +539,9 @@ print(json.loads(data.decode("utf-8"))["token"])
                 "type": "object",
                 "required": [
                   "userid",
-                  "password"
+                  "password",
+                  "separator",
+                  "stop_on_error"
                 ],
                 "properties": {
                   "userid": {
@@ -549,6 +551,14 @@ print(json.loads(data.decode("utf-8"))["token"])
                   "password": {
                     "type": "string",
                     "example": "mypassword"
+                  },
+                  "separator": {
+                    "type": "string",
+                    "enum": [";"]
+                  },
+                  "stop_on_error": {
+                    "type": "string",
+                    "enum": ["no"]
                   }
                 }
               }
