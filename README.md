@@ -511,9 +511,14 @@ print(json.loads(data.decode("utf-8"))["token"])
     "description": "Endpoint para autenticação e geração de token."
   },
   "servers": [
-    {
-      "url": "https://{HOSTNAME}"
-    }
+        {
+            "url": "https://{HOSTNAME}",
+            "variables": {
+                "HOSTNAME": {
+                    "default": "example.db2.cloud.ibm.com"
+                }
+            }
+        }
   ],
   "paths": {
     "/dbapi/v4/auth/tokens": {
@@ -680,19 +685,17 @@ print(json.loads(data.decode("utf-8"))["id"])
                                     },
                                     "limit": {
                                         "type": "integer",
-                                        "example": 10
+                                        "enum": [10]
                                     },
                                     "separator": {
                                         "type": "string",
-                                        "example": ";"
+                                        "enum": [";"]
                                     },
                                     "stop_on_error": {
                                         "type": "string",
                                         "enum": [
-                                            "yes",
                                             "no"
-                                        ],
-                                        "example": "no"
+                                        ]
                                     }
                                 }
                             }
