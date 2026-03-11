@@ -1,21 +1,25 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Db2 Authentication API",
+    "title": "DB API Authentication",
     "version": "1.0.0",
-    "description": "API para obtenção de token de autenticação no Db2 on Cloud."
+    "description": "Endpoint para autenticação e geração de token."
   },
   "servers": [
-    {
-      "url": "https://bpe61bfd0365e9u4psdglite.db2.cloud.ibm.com"
-    }
+        {
+            "url": "https://{HOSTNAME}",
+            "variables": {
+                "HOSTNAME": {
+                    "default": "example.db2.cloud.ibm.com"
+                }
+            }
+        }
   ],
   "paths": {
     "/dbapi/v4/auth/tokens": {
       "post": {
-        "summary": "Obter token de autenticação",
-        "description": "Autentica usuário no Db2 e retorna token de acesso.",
-        "operationId": "getAuthToken",
+        "summary": "Generate authentication token",
+        "operationId": "generateAuthToken",
         "parameters": [
           {
             "name": "x-deployment-id",
@@ -24,7 +28,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Identificador do deployment do serviço."
+            "description": "Deployment identifier"
           }
         ],
         "requestBody": {
@@ -33,15 +37,28 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["userid", "password"],
+                "required": [
+                  "userid",
+                  "password",
+                  "separator",
+                  "stop_on_error"
+                ],
                 "properties": {
                   "userid": {
                     "type": "string",
-                    "example": "xxx"
+                    "example": "user123"
                   },
                   "password": {
                     "type": "string",
-                    "example": "yyy"
+                    "example": "mypassword"
+                  },
+                  "separator": {
+                    "type": "string",
+                    "enum": [";"]
+                  },
+                  "stop_on_error": {
+                    "type": "string",
+                    "enum": ["no"]
                   }
                 }
               }
@@ -50,7 +67,7 @@
         },
         "responses": {
           "200": {
-            "description": "Autenticação realizada com sucesso",
+            "description": "Authentication token generated",
             "content": {
               "application/json": {
                 "schema": {
@@ -58,22 +75,16 @@
                   "properties": {
                     "userid": {
                       "type": "string",
-                      "example": "user"
+                      "example": "user123"
                     },
                     "token": {
                       "type": "string",
-                      "example": "XXXXXX"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Requisição inválida"
-          },
-          "401": {
-            "description": "Credenciais inválidas"
           }
         }
       }
