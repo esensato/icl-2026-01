@@ -1,5 +1,7 @@
 ### AV-01-ICL-Chatbot
-- Siga o roteiro abaixo para implementar uma jornada para que alunos de uma universidade possam utilizar o **chatbot** para efetuar a matrícula em uma disciplina do curso
+- Siga o roteiro abaixo para implementar uma jornada para que alunos de uma universidade possam utilizar o **chatbot** para efetuar a matrícula em uma disciplina do curso:
+    - Implementar uma **action** para que o aluno possa consultar seus créditos até o momento;
+    - Implementar outra **action** para que o aluno possa efetuar a sua matrícula em uma disciplina, atualizando seus créditos conforme a disciplina selecionada;
 #### Configurar DB2
 - Será utilizado o serviço de banco de dados relacional **DB2** para esta atividade
 - No catálogo da **IBM Cloud** pesquisar por **DB2** e instanciar o serviço (aguardar até que esteja provisionado) - [https://cloud.ibm.com/catalog#all_products](https://cloud.ibm.com/catalog#all_products)
