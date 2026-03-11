@@ -754,3 +754,116 @@ data = res.read()
 
 print(data.decode("utf-8"))
 ```
+```json
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Db2 SQL Job Result API",
+        "version": "1.0.0",
+        "description": "API para consultar o resultado de um SQL Job no Db2 on Cloud."
+    },
+    "servers": [
+        {
+            "url": "${HOSTNAME}",
+            "variables": {
+                "HOSTNAME": {
+                    "default": "example.db2.cloud.ibm.com"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/dbapi/v4/sql_jobs/{id}": {
+            "get": {
+                "summary": "Consultar resultado do SQL Job",
+                "operationId": "getSqlJobResult",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Identificador do job SQL.",
+                        "schema": {
+                            "type": "string",
+                            "example": "1772644599186_733471460"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "description": "Token Bearer de autenticação.",
+                        "schema": {
+                            "type": "string",
+                            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                    },
+                    {
+                        "name": "x-deployment-id",
+                        "in": "header",
+                        "required": true,
+                        "description": "Identificador do deployment do serviço.",
+                        "schema": {
+                            "type": "string",
+                            "example": "zzz"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resultado do SQL Job",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "completed"
+                                        },
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "rows_count": {
+                                                        "type": "integer",
+                                                        "description": "Quantidade de linhas retornadas.",
+                                                        "example": 32
+                                                    },
+                                                    "rows": {
+                                                        "type": "array",
+                                                        "description": "Matriz contendo os resultados da consulta.",
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    },
+                    "401": {
+                        "description": "Não autorizado"
+                    },
+                    "404": {
+                        "description": "Job não encontrado"
+                    }
+                }
+            }
+        }
+    }
+}
+```
