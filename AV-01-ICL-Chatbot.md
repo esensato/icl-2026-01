@@ -33,9 +33,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "DB API Authentication",
+    "title": "GetDB2Token",
     "version": "1.0.0",
-    "description": "Endpoint para autenticação e geração de token."
+    "description": "GetDB2Token"
   },
   "servers": [
         {
@@ -50,8 +50,8 @@
   "paths": {
     "/dbapi/v4/auth/tokens": {
       "post": {
-        "summary": "Generate authentication token",
-        "operationId": "generateAuthToken",
+        "summary": "GetDB2Token",
+        "operationId": "GetDB2Token",
         "parameters": [
           {
             "name": "x-deployment-id",
@@ -71,9 +71,7 @@
                 "type": "object",
                 "required": [
                   "userid",
-                  "password",
-                  "separator",
-                  "stop_on_error"
+                  "password"
                 ],
                 "properties": {
                   "userid": {
@@ -83,14 +81,6 @@
                   "password": {
                     "type": "string",
                     "example": "mypassword"
-                  },
-                  "separator": {
-                    "type": "string",
-                    "enum": [";"]
-                  },
-                  "stop_on_error": {
-                    "type": "string",
-                    "enum": ["no"]
                   }
                 }
               }
