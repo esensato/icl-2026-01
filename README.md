@@ -764,7 +764,7 @@ print(data.decode("utf-8"))
     },
     "servers": [
         {
-            "url": "${HOSTNAME}",
+            "url": "https://${HOSTNAME}",
             "variables": {
                 "HOSTNAME": {
                     "default": "example.db2.cloud.ibm.com"
