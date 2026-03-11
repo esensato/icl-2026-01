@@ -39,9 +39,7 @@
                 "type": "object",
                 "required": [
                   "userid",
-                  "password",
-                  "separator",
-                  "stop_on_error"
+                  "password"
                 ],
                 "properties": {
                   "userid": {
@@ -51,14 +49,6 @@
                   "password": {
                     "type": "string",
                     "example": "mypassword"
-                  },
-                  "separator": {
-                    "type": "string",
-                    "enum": [";"]
-                  },
-                  "stop_on_error": {
-                    "type": "string",
-                    "enum": ["no"]
                   }
                 }
               }
