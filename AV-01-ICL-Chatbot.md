@@ -222,6 +222,18 @@
     }
 }
 ```
+- Para formatar o resultado da consulta utilizar o `LISTAGG`
+```sql
+SELECT 
+LISTAGG(
+    '<div style="background-color: #f0f0f0;font-weight: bold;">' || id || '</div>' ||
+    '<div>' || nome_disciplina || '</div>' ||
+    '<div>Semestre: ' || semestre || '</div>' ||
+    '<div>Créditos: ' || creditos || '</div>'
+,'') 
+WITHIN GROUP (ORDER BY id) AS html
+FROM DISCIPLINAS WHERE SEMESTRE = ${SEMESTRE}
+```
 - `GetDb2QueryResult`
 ```json
 {
