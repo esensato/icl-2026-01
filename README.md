@@ -731,6 +731,18 @@ print(json.loads(data.decode("utf-8"))["id"])
     }
 }
 ```
+- Uma forma de definir a formação para o resultado da consulta é usando o `STRAGGR`
+```sql
+SELECT 
+LISTAGG(
+    '<div style="background-color: #f0f0f0;font-weight: bold;">' || id || '</div>' ||
+    '<div>' || nome_disciplina || '</div>' ||
+    '<div>Semestre: ' || semestre || '</div>' ||
+    '<div>Créditos: ' || creditos || '</div>'
+,'') 
+WITHIN GROUP (ORDER BY id) AS html
+FROM DISCIPLINAS WHERE SEMESTRE = ${SEMESTRE}
+```
 - Obter o restulado final da execução (atualizar o `id`)
 ```bash
 import http.client
