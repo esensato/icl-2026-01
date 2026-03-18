@@ -1,8 +1,8 @@
 ## Microsoft Azure
-- Obter créditos **Student** para no [azure.microsoft.com](https://azure.microsoft.com/en-us/free/students/?culture=pt-br&country=br)(pressionar control para abrir em nova página)
+- Obter créditos **Student** para no [azure.microsoft.com](https://azure.microsoft.com/en-us/free/students/?culture=pt-br&country=br) *(pressionar control para abrir em nova página)*
 
 ### Deploy Aplicação
-- Efetuar login no [portal.azure.com](https://portal.azure.com/)(pressionar control para abrir em nova página)
+- Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
 - Registrar *namespace* `Microsoft.OperationalInsights`
 ```bash
