@@ -1,6 +1,77 @@
 ## Microsoft Azure
 - Obter créditos **Student** para no [azure.microsoft.com](https://azure.microsoft.com/en-us/free/students/?culture=pt-br&country=br) *(pressionar control para abrir em nova página)*
 
+```bash
+az group list --output table
+az resource list --output table
+
+```
+### Acessando Banco SQL Server
+```sql
+CREATE TABLE [dbo].[Recibos] (
+    Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Cliente NVARCHAR(100) NULL,
+    Total FLOAT NULL);
+```
+```bash
+npm install --save mssql
+```
+```javascript
+const sql = require("mssql");
+
+const config = {
+  user: "esensato@esensato",
+  password: "SUA_SENHA",
+  server: "esensato.database.windows.net",
+  database: "db",
+  port: 1433,
+  options: {
+    encrypt: true, // obrigatório no Azure
+    trustServerCertificate: false
+  },
+  connectionTimeout: 30000
+};
+
+async function conectar() {
+  try {
+    await sql.connect(config);
+
+    const result = await sql.query("SELECT GETDATE() as data");
+
+    console.log(result.recordset);
+
+  } catch (err) {
+    console.error("Erro:", err);
+  }
+}
+
+conectar();
+```
+```javascript
+async function inserirRecibo() {
+  try {
+    await sql.connect(config);
+
+    const request = new sql.Request();
+
+    request.input("Id", sql.Int, 1);
+    request.input("Cliente", sql.NVarChar(100), "João Silva");
+    request.input("Total", sql.Float, 150.75);
+
+    await request.query(`
+      INSERT INTO dbo.Recibos (Id, Cliente, Total)
+      VALUES (@Id, @Cliente, @Total)
+    `);
+
+    console.log("✅ Registro inserido com sucesso!");
+
+  } catch (err) {
+    console.error("❌ Erro:", err);
+  } finally {
+    sql.close();
+  }
+}
+```
 ### Document Intelligence API
 ```bash
 npm init -y
@@ -82,6 +153,13 @@ app.listen(PORT, () => {
   console.log("Servidor rodando na porta", PORT);
 });
 ```
+### Functions
+- Pressionar `Shift` + `Control` + `P` no **VS Code**
+- Digitar `Create function...`
+```bash
+npm install @azure/msal-node express express-session
+```
+
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
