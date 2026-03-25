@@ -4,7 +4,7 @@
 ```bash
 az group list --output table
 az resource list --output table
-
+az provider register --namespace Microsoft.OperationalInsights
 ```
 ### Acessando Banco SQL Server
 ```sql
