@@ -246,7 +246,7 @@ app.http('listarRecibosFunction', {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ msg: "ok" })
+            body: JSON.stringify(recibos)
         };
     }
 });
