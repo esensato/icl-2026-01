@@ -252,7 +252,52 @@ app.http('listarRecibosFunction', {
 });
 ```
 - Editar o arquivo `local.settings.json` e incluir a configuração para acesso ao banco de dados `SqlConnectionString` dentro de `Values`
+- Para inserir um registro
+```javascript
+const { app, output } = require('@azure/functions');
 
+// Binding de saída (INSERT)
+const sqlOutput = output.sql({
+    commandText: 'dbo.Recibos', // nome da tabela
+    connectionStringSetting: 'SqlConnectionString'
+});
+
+app.http('inserirReciboFunction', {
+    methods: ['POST'],
+    authLevel: 'anonymous',
+
+    extraOutputs: [sqlOutput],
+
+    handler: async (request, context) => {
+
+        context.log("Inserindo novo recibo...");
+
+        // Pegando dados do body (JSON)
+        const body = await request.json();
+
+        const novoRecibo = {
+            Cliente: body.cliente,
+            Total: body.total
+        };
+
+        // Envia para o binding (INSERT automático)
+        context.extraOutputs.set(sqlOutput, [novoRecibo]);
+
+        context.log("Recibo inserido:", novoRecibo);
+
+        return {
+            status: 201,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                message: "Recibo inserido com sucesso",
+                data: novoRecibo
+            }
+        };
+    }
+});
+```
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
