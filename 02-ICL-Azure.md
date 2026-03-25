@@ -1,6 +1,6 @@
 ## Microsoft Azure
 - Obter créditos **Student** para no [azure.microsoft.com](https://azure.microsoft.com/en-us/free/students/?culture=pt-br&country=br) *(pressionar control para abrir em nova página)*
-
+- Acessar o [portal.azure.com](https://portal.azure.com/auth/login/)
 ```bash
 az group list --output table
 az resource list --output table
@@ -154,6 +154,14 @@ app.listen(PORT, () => {
 });
 ```
 ### Azure Functions
+- Para efetuar testes locais
+```bash
+npm install -g azure-functions-core-tools@4
+npm install @azure/functions
+npm install @azure/functions-extensions-azure-sql
+
+func start
+```
 - HTTP Funcion
 ```javascript
 const { app } = require('@azure/functions');
@@ -197,6 +205,8 @@ app.storageQueue('queueFunction', {
 ```
 - Blob
 ```javascript
+const { app } = require('@azure/functions');
+
 app.storageBlob('blobFunction', {
     path: 'arquivos/{name}',
     connection: 'AzureWebJobsStorage',
