@@ -153,11 +153,58 @@ app.listen(PORT, () => {
   console.log("Servidor rodando na porta", PORT);
 });
 ```
-### Functions
-- Pressionar `Shift` + `Control` + `P` no **VS Code**
-- Digitar `Create function...`
-```bash
-npm install @azure/msal-node express express-session
+### Azure Functions
+- HTTP Funcion
+```javascript
+const { app } = require('@azure/functions');
+
+app.http('helloFunction', {
+    methods: ['GET', 'POST'],
+    authLevel: 'anonymous',
+    handler: async (request, context) => {
+        context.log(`Http function processed request for url "${request.url}"`);
+
+        const name = request.query.get('name') || await request.text() || 'world';
+
+        return { body: `Hello, ${name}!` };
+    }
+});
+```
+- Timer Function
+```javascript
+const { app } = require('@azure/functions');
+
+app.timer('timerFunction', {
+    schedule: '*/10 * * * * *',
+
+    handler: async (myTimer, context) => {
+        context.log('Executando a cada 10 segundos');
+    }
+});
+```
+- Queue
+```javascript
+const { app } = require('@azure/functions');
+
+app.storageQueue('queueFunction', {
+    queueName: 'minha-fila',
+    connection: 'AzureWebJobsStorage',
+
+    handler: async (message, context) => {
+        context.log('Mensagem:', message);
+    }
+});
+```
+- Blob
+```javascript
+app.storageBlob('blobFunction', {
+    path: 'arquivos/{name}',
+    connection: 'AzureWebJobsStorage',
+
+    handler: async (blob, context) => {
+        context.log('Arquivo processado');
+    }
+});
 ```
 
 ### Deploy Aplicação
