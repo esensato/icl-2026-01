@@ -252,6 +252,49 @@ app.http('listarRecibosFunction', {
 });
 ```
 - Editar o arquivo `local.settings.json` e incluir a configuração para acesso ao banco de dados `SqlConnectionString` dentro de `Values`
+- Exemplo com passagem de parâmetros
+```javascript
+const { app, input } = require('@azure/functions');
+
+// Binding com parâmetro
+const sqlInput = input.sql({
+    commandText: `
+        SELECT Id, Cliente, Total 
+        FROM dbo.Recibos
+        WHERE Cliente = @cliente
+    `,
+    parameters: [
+        {
+            name: 'cliente',
+            type: 'nvarchar',
+            value: '{query.cliente}'
+        }
+    ],
+    connectionStringSetting: 'SqlConnectionString'
+});
+
+app.http('listarRecibosFunction', {
+    methods: ['GET'],
+    authLevel: 'anonymous',
+
+    extraInputs: [sqlInput],
+
+    handler: async (request, context) => {
+
+        context.log("Buscando recibos por cliente...");
+
+        const cliente = request.query.get('cliente');
+        context.log("Cliente recebido:", cliente);
+
+        const recibos = context.extraInputs.get(sqlInput);
+
+        return {
+            status: 200,
+            body: recibos
+        };
+    }
+});
+```
 - Para inserir um registro
 ```javascript
 const { app, output } = require('@azure/functions');
