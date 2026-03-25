@@ -285,7 +285,7 @@ npm init -y
 ```
 - Instalar as dependências
 ```bash
-npm install @azure/storage-blob
+npm install --save @azure/storage-blob express multer
 ```
 - Criar o arquivo para *upload* (no caso, o arquivo considerado se chama `arquivo.txt`)
 - Implementar o código para efetuar o *upload*
@@ -319,6 +319,130 @@ uploadBlob();
 ```bash
 az storage account keys list --resource-group <resource-group> --account-name <storage-account>
 ```
+- Exemplo de uma aplicação com *frontend* para o upload de imagem
+```javascript
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+
+const app = express();
+
+// Pasta para salvar uploads
+const upload = multer({ dest: 'uploads/' });
+
+// Servir arquivos estáticos
+app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
+
+// Rota de upload
+app.post('/upload', upload.single('file'), (req, res) => {
+    const file = req.file;
+
+    // Redireciona para página de visualização
+    res.redirect(`/view.html?img=${file.filename}`);
+});
+
+// Iniciar servidor
+app.listen(3000, () => {
+    console.log('Servidor rodando em http://localhost:3000');
+});
+```
+- Criar uma pasta `public` no projeto para conter os arquivos *HTML* e *CSS*
+- Código HTML para enviar o arquivo (imagem)
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de Imagem</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Upload de Imagem</h1>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+</body>
+</html>
+```
+- Código HTML para exibir o arquivo (imagem)
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imagem Enviada</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Upload realizado!</h1>
+    <img id="preview" />
+    <br><br>
+    <a href="/">Voltar</a>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const img = params.get("img");
+
+    document.getElementById("preview").src = "/uploads/" + img;
+</script>
+
+</body>
+</html>
+```
+- Arquivo de estilos
+```css
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    margin-bottom: 15px;
+}
+
+button {
+    background: #0078d4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #005fa3;
+}
+
+img {
+    max-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+}
+```
+
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
