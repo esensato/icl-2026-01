@@ -190,32 +190,85 @@ app.timer('timerFunction', {
     }
 });
 ```
-- Queue
+- Queue produtor
 ```javascript
-const { app } = require('@azure/functions');
+const { app, output } = require('@azure/functions');
 
-app.storageQueue('queueFunction', {
+// Output binding para fila
+const queueOutput = output.storageQueue({
     queueName: 'minha-fila',
-    connection: 'AzureWebJobsStorage',
+    connection: 'AzureWebJobsStorage'
+});
 
-    handler: async (message, context) => {
-        context.log('Mensagem:', message);
+app.http('enviarMensagemFunction', {
+    methods: ['POST'],
+    authLevel: 'anonymous',
+
+    extraOutputs: [queueOutput],
+
+    handler: async (request, context) => {
+
+        const body = await request.json();
+
+        const mensagem = {
+            cliente: body.cliente,
+            total: body.total,
+            data: new Date().toISOString()
+        };
+
+        // Envia para fila
+        context.extraOutputs.set(queueOutput, mensagem);
+
+        context.log("Mensagem enviada para fila:", mensagem);
+
+        return {
+            status: 200,
+            body: {
+                message: "Mensagem enviada com sucesso",
+                data: mensagem
+            }
+        };
     }
 });
+
+- Queue consumidor
+
 ```
 - Blob
 ```javascript
 const { app } = require('@azure/functions');
 
-app.storageBlob('blobFunction', {
-    path: 'arquivos/{name}',
+app.storageBlob('processarArquivoFunction', {
+    path: 'uploads/{name}',
     connection: 'AzureWebJobsStorage',
 
     handler: async (blob, context) => {
-        context.log('Arquivo processado');
+
+        const fileName = context.triggerMetadata.name;
+
+        context.log(`Arquivo recebido: ${fileName}`);
+        context.log(`Tamanho: ${blob.length} bytes`);
+        const content = blob.toString();
+
+        context.log("Conteúdo:", content);
     }
 });
 ```
+- Código **Nodejs** cliente para efetuar o upload do arquivo
+```javacript
+const { BlobServiceClient } = require('@azure/storage-blob');
+
+async function upload() {
+    const client = BlobServiceClient.fromConnectionString("UseDevelopmentStorage=true");
+    const container = client.getContainerClient("uploads");
+    await container.createIfNotExists();
+    const blockBlob = container.getBlockBlobClient("teste.txt");
+    await blockBlob.upload("Olá mundo!", Buffer.byteLength("Olá mundo!"));
+    console.log("Upload realizado!");
+}
+
+upload();
+``` 
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
