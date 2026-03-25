@@ -216,6 +216,42 @@ app.storageBlob('blobFunction', {
     }
 });
 ```
+- Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
+```javascript
+const { app, input } = require('@azure/functions');
+
+// Define o binding de saída (SQL)
+const sqlInput = input.sql({
+    commandText: 'SELECT Id, Cliente, Total FROM dbo.Recibos',
+    connectionStringSetting: 'SqlConnectionString'
+});
+
+app.http('listarRecibosFunction', {
+    methods: ['GET'],
+    authLevel: 'anonymous',
+    extraInputs: [sqlInput],
+    handler: async (request, context) => {
+
+        context.log("Buscando recibos no banco...");
+
+        context.log(sqlInput);
+
+        // Executa o binding automaticamente
+        const recibos = context.extraInputs.get(sqlInput);
+
+        context.log("Resultado: ", recibos);
+
+        return {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ msg: "ok" })
+        };
+    }
+});
+```
+- Editar o arquivo `local.settings.json` e incluir a configuração para acesso ao banco de dados `SqlConnectionString` dentro de `Values`
 
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
