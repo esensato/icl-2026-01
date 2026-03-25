@@ -277,20 +277,48 @@ app.storageBlob('processarArquivoFunction', {
 });
 ```
 - Código **Nodejs** cliente para efetuar o upload do arquivo
+- Criar o projeto
+```bash
+mkdir upload-blob
+cd upload-blob
+npm init -y
+```
+- Instalar as dependências
+```bash
+npm install @azure/storage-blob
+```
+- Criar o arquivo para *upload* (no caso, o arquivo considerado se chama `arquivo.txt`)
+- Implementar o código para efetuar o *upload*
 ```javacript
 const { BlobServiceClient } = require('@azure/storage-blob');
+const fs = require('fs');
 
-async function upload() {
-    const client = BlobServiceClient.fromConnectionString("UseDevelopmentStorage=true");
-    const container = client.getContainerClient("uploads");
-    await container.createIfNotExists();
-    const blockBlob = container.getBlockBlobClient("teste.txt");
-    await blockBlob.upload("Olá mundo!", Buffer.byteLength("Olá mundo!"));
-    console.log("Upload realizado!");
+const connectionString = "UseDevelopmentStorage=true";
+const containerName = "uploads";
+const filePath = "./arquivo.txt";
+
+async function uploadBlob() {
+    try {
+        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        const containerClient = blobServiceClient.getContainerClient(containerName);
+        await containerClient.createIfNotExists();
+        const blobName = "arquivo-" + Date.now() + ".txt";
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+        const uploadResponse = await blockBlobClient.uploadFile(filePath);
+        console.log("Upload realizado com sucesso!");
+        console.log("Blob:", blobName);
+
+    } catch (err) {
+        console.error("Erro:", err.message);
+    }
 }
 
-upload();
-``` 
+uploadBlob();
+```
+- Para o ambiente de cloud, consultar o [Storage Account](https://portal.azure.com/#view/Microsoft_Azure_StorageHub/StorageHub.MenuView/~/StorageAccountsBrowse)
+```bash
+az storage account keys list --resource-group <resource-group> --account-name <storage-account>
+```
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
