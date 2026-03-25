@@ -298,6 +298,28 @@ app.http('inserirReciboFunction', {
     }
 });
 ```
+- Como ficaria uma aplicação que chama o *endpoint* para cadastrar um recibo (atualizar a **URL** com o endereço gerado para publicação na **Azure**)
+```javascript
+async function inserirRecibo() {
+    const URL_POST = 'http://localhost:7071/api/inserirReciboFunction';
+    const response = await fetch(URL_POST, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cliente: 'João da Silva',
+            total: 250.90
+        })
+    });
+
+    const data = await response.json();
+
+    console.log("Resposta:", data);
+}
+
+inserirRecibo();
+```
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
