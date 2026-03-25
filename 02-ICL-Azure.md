@@ -230,9 +230,31 @@ app.http('enviarMensagemFunction', {
         };
     }
 });
-
+```
 - Queue consumidor
+```javascript
+const { app } = require('@azure/functions');
 
+app.storageQueue('processarFilaFunction', {
+    queueName: 'minha-fila',
+    connection: 'AzureWebJobsStorage',
+
+    handler: async (message, context) => {
+
+        context.log("Mensagem recebida da fila:");
+
+        context.log(message);
+
+        // Exemplo de processamento
+        context.log(`Cliente: ${message.cliente}`);
+        context.log(`Total: ${message.total}`);
+
+        // Aqui você poderia:
+        // - salvar no banco
+        // - chamar outra API
+        // - enviar email
+    }
+});
 ```
 - Blob
 ```javascript
