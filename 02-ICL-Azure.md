@@ -289,7 +289,7 @@ npm install --save @azure/storage-blob express multer
 ```
 - Criar o arquivo para *upload* (no caso, o arquivo considerado se chama `arquivo.txt`)
 - Implementar o código para efetuar o *upload*
-```javacript
+```javascript
 const { BlobServiceClient } = require('@azure/storage-blob');
 const fs = require('fs');
 
