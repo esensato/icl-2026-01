@@ -307,6 +307,8 @@ async function uploadBlob() {
         const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         const containerClient = blobServiceClient.getContainerClient(containerName);
         await containerClient.createIfNotExists();
+        // Somente para teste (falha de segurança!)
+        await containerClient.setAccessPolicy('blob');
         const blobName = "arquivo-" + Date.now() + ".txt";
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const uploadResponse = await blockBlobClient.uploadFile(filePath);
