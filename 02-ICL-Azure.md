@@ -283,6 +283,11 @@ mkdir upload-blob
 cd upload-blob
 npm init -y
 ```
+- Instalar o **Azurite** para testar o armazenamento localmente
+```bash
+npm install -g azurite
+azurite --skipApiVersionCheck
+```
 - Instalar as dependências
 ```bash
 npm install --save @azure/storage-blob express multer
@@ -305,7 +310,7 @@ async function uploadBlob() {
         const blobName = "arquivo-" + Date.now() + ".txt";
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const uploadResponse = await blockBlobClient.uploadFile(filePath);
-        console.log("Upload realizado com sucesso!");
+        console.log("Upload realizado com sucesso!", JSON.stringify(uploadResponse));
         console.log("Blob:", blobName);
 
     } catch (err) {
@@ -319,36 +324,9 @@ uploadBlob();
 ```bash
 az storage account keys list --resource-group <resource-group> --account-name <storage-account>
 ```
-- Exemplo de uma aplicação com *frontend* para o upload de imagem
-```javascript
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-
-const app = express();
-
-// Pasta para salvar uploads
-const upload = multer({ dest: 'uploads/' });
-
-// Servir arquivos estáticos
-app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
-
-// Rota de upload
-app.post('/upload', upload.single('file'), (req, res) => {
-    const file = req.file;
-
-    // Redireciona para página de visualização
-    res.redirect(`/view.html?img=${file.filename}`);
-});
-
-// Iniciar servidor
-app.listen(3000, () => {
-    console.log('Servidor rodando em http://localhost:3000');
-});
-```
+#### Exemplo de uma aplicação com *frontend* para o upload de imagem
 - Criar uma pasta `public` no projeto para conter os arquivos *HTML* e *CSS*
-- Código HTML para enviar o arquivo (imagem)
+- Código HTML para enviar a imagem (index.html)
 ```html
 <!DOCTYPE html>
 <html>
@@ -370,7 +348,7 @@ app.listen(3000, () => {
 </body>
 </html>
 ```
-- Código HTML para exibir o arquivo (imagem)
+- Código HTML para exibir a imagem (view.html)
 ```html
 <!DOCTYPE html>
 <html>
@@ -397,7 +375,7 @@ app.listen(3000, () => {
 </body>
 </html>
 ```
-- Arquivo de estilos
+- Arquivo de estilos (`style.css`)
 ```css
 body {
     font-family: Arial;
@@ -442,7 +420,34 @@ img {
     box-shadow: 0 0 10px #ccc;
 }
 ```
+- Código **nodejs** para processar a imagem (`server.js`)
+```javascript
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
 
+const app = express();
+
+// Pasta para salvar uploads
+const upload = multer({ dest: 'uploads/' });
+
+// Servir arquivos estáticos
+app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
+
+// Rota de upload
+app.post('/upload', upload.single('file'), (req, res) => {
+    const file = req.file;
+
+    // Redireciona para página de visualização
+    res.redirect(`/view.html?img=${file.filename}`);
+});
+
+// Iniciar servidor
+app.listen(3000, () => {
+    console.log('Servidor rodando em http://localhost:3000');
+});
+```
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
