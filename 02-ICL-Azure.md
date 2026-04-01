@@ -213,7 +213,7 @@ npm install @azure/functions-extensions-azure-sql
 
 func start
 ```
-- HTTP Funcion
+#### HTTP Funcions
 ```javascript
 const { app } = require('@azure/functions');
 
@@ -229,7 +229,7 @@ app.http('helloFunction', {
     }
 });
 ```
-- Timer Function
+#### Timer Function
 ```javascript
 const { app } = require('@azure/functions');
 
@@ -241,7 +241,7 @@ app.timer('timerFunction', {
     }
 });
 ```
-- Queue produtor
+#### Queue Function - Produtor
 ```javascript
 const { app, output } = require('@azure/functions');
 
@@ -282,7 +282,7 @@ app.http('enviarMensagemFunction', {
     }
 });
 ```
-- Queue consumidor
+#### Queue Function - Consumidor
 ```javascript
 const { app } = require('@azure/functions');
 
@@ -307,7 +307,7 @@ app.storageQueue('processarFilaFunction', {
     }
 });
 ```
-- Blob
+#### Blob Function - Produtor
 - Código **Nodejs** cliente para efetuar o upload do arquivo
 - Criar o projeto
 ```bash
