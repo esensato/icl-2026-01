@@ -307,7 +307,7 @@ async function uploadBlob() {
         const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         const containerClient = blobServiceClient.getContainerClient(containerName);
         await containerClient.createIfNotExists();
-        // Somente para teste (falha de segurança!)
+        // Somente para teste (falha de segurança pois permite o acesso via URL direto ao arquivo!)
         await containerClient.setAccessPolicy('blob');
         const blobName = "arquivo-" + Date.now() + ".txt";
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -322,6 +322,7 @@ async function uploadBlob() {
 
 uploadBlob();
 ```
+- O arquivo pode ser acessado por meio da URL `http://127.0.0.1:10000/devstoreaccount1/uploads/NOME_DO_ARQUIVO` (trocar o `NOME_DO_ARQUIVO`)
 - Para o ambiente de cloud, consultar o [Storage Account](https://portal.azure.com/#view/Microsoft_Azure_StorageHub/StorageHub.MenuView/~/StorageAccountsBrowse)
 ```bash
 az storage account keys list --resource-group <resource-group> --account-name <storage-account>
@@ -430,8 +431,17 @@ const path = require('path');
 
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
 // Pasta para salvar uploads
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage });
 
 // Servir arquivos estáticos
 app.use(express.static('public'));
@@ -450,6 +460,8 @@ app.listen(3000, () => {
     console.log('Servidor rodando em http://localhost:3000');
 });
 ```
+- Adaptar o código acima para realizar o upload na **Azure**
+### Acesso Banco de Dados
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
