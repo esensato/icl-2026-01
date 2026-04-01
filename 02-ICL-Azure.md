@@ -257,25 +257,6 @@ app.storageQueue('processarFilaFunction', {
 });
 ```
 - Blob
-```javascript
-const { app } = require('@azure/functions');
-
-app.storageBlob('processarArquivoFunction', {
-    path: 'uploads/{name}',
-    connection: 'AzureWebJobsStorage',
-
-    handler: async (blob, context) => {
-
-        const fileName = context.triggerMetadata.name;
-
-        context.log(`Arquivo recebido: ${fileName}`);
-        context.log(`Tamanho: ${blob.length} bytes`);
-        const content = blob.toString();
-
-        context.log("Conteúdo:", content);
-    }
-});
-```
 - Código **Nodejs** cliente para efetuar o upload do arquivo
 - Criar o projeto
 ```bash
@@ -323,6 +304,26 @@ async function uploadBlob() {
 uploadBlob();
 ```
 - O arquivo pode ser acessado por meio da URL `http://127.0.0.1:10000/devstoreaccount1/uploads/NOME_DO_ARQUIVO` (trocar o `NOME_DO_ARQUIVO`)
+- Quando um arquivo é carregado (*upload*) então uma função do tipo `storageBlob` pode ser disparada
+```javascript
+const { app } = require('@azure/functions');
+
+app.storageBlob('processarArquivoFunction', {
+    path: 'uploads/{name}',
+    connection: 'AzureWebJobsStorage',
+
+    handler: async (blob, context) => {
+
+        const fileName = context.triggerMetadata.name;
+
+        context.log(`Arquivo recebido: ${fileName}`);
+        context.log(`Tamanho: ${blob.length} bytes`);
+        const content = blob.toString();
+
+        context.log("Conteúdo:", content);
+    }
+});
+```
 - Para o ambiente de cloud, consultar o [Storage Account](https://portal.azure.com/#view/Microsoft_Azure_StorageHub/StorageHub.MenuView/~/StorageAccountsBrowse)
 ```bash
 az storage account keys list --resource-group <resource-group> --account-name <storage-account>
