@@ -7,12 +7,54 @@ az resource list --output table
 az provider register --namespace Microsoft.OperationalInsights
 ```
 ### Acessando Banco SQL Server
+- Criar uma instância de banco de dados **SQL Server** usando o *CLI* (`az`)
+```bash
+
+az account list-locations --output table
+
+az sql db list-editions --location brazilsouth --output table
+
+az group create --name rg-demo --location brazilsouth
+
+az sql server create --name meusqlserver123 --resource-group rg-demo --location brazilsouth --admin-user adminuser --admin-password "SenhaForte!123"
+
+az sql server firewall-rule create --resource-group rg-demo --server meusqlserver123 --name AllowMyIP --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+az sql db create --resource-group rg-demo --server meusqlserver123 --name db --service-objective Basic
+
+az sql db list --resource-group rg-demo --server meusqlserver123 --output table
+```
+- Para remover um grupo de recursos (e todos os recursos associados a ele!)
+```bash
+az group delete --name rg-demo --yes --no-wait
+```
+- Efretuar a conexão com o banco de dados criado
+```bash
+sqlcmd -S meusqlserver123.database.windows.net \
+       -d db \
+       -U adminuser \
+       -P 'SenhaForte!123'
+```
+- Código *SQL* para criar as tabelas utilizadas nos exemplos
 ```sql
 CREATE TABLE [dbo].[Recibos] (
     Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     Cliente NVARCHAR(100) NULL,
     Total FLOAT NULL);
+
+CREATE TABLE PEDIDOS (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    valor DECIMAL(10,2) NOT NULL,
+    FINALIZADO BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE PEDIDOS_EXCLUIDOS (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    TOTAL INT NOT NULL,
+    DATA_CRIACAO DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
 ```
+- Efetuando a conexão com o banco de dados criado
 ```bash
 npm install --save mssql
 ```
@@ -20,9 +62,9 @@ npm install --save mssql
 const sql = require("mssql");
 
 const config = {
-  user: "esensato@esensato",
-  password: "SUA_SENHA",
-  server: "esensato.database.windows.net",
+  user: "adminuser",
+  password: "SenhaForte!123",
+  server: "meusqlserver123.database.windows.net",
   database: "db",
   port: 1433,
   options: {
@@ -47,6 +89,7 @@ async function conectar() {
 
 conectar();
 ```
+- Exemplo para inserir um registro
 ```javascript
 async function inserirRecibo() {
   try {
@@ -63,20 +106,22 @@ async function inserirRecibo() {
       VALUES (@Id, @Cliente, @Total)
     `);
 
-    console.log("✅ Registro inserido com sucesso!");
+    console.log("Registro inserido com sucesso!");
 
   } catch (err) {
-    console.error("❌ Erro:", err);
+    console.error("Erro:", err);
   } finally {
     sql.close();
   }
 }
 ```
 ### Document Intelligence API
+- Permite analisar um documento e extrair informações textuais a partir dele
 ```bash
 npm init -y
 npm install axios express multer
 ```
+- Exemplo de uso
 ```javascript
 const express = require("express");
 const multer = require("multer");
@@ -154,6 +199,12 @@ app.listen(PORT, () => {
 });
 ```
 ### Azure Functions
+- Comandos do **Azure** *CLI* (`az`)
+```bash
+az functionapp list --output table
+az functionapp function list --name minha-func-app --resource-group rg-demo --output table
+az functionapp function show --name minha-func-app --resource-group rg-demo --function-name helloFunction
+```
 - Para efetuar testes locais
 ```bash
 npm install -g azure-functions-core-tools@4
