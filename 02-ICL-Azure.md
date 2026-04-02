@@ -242,6 +242,17 @@ app.timer('timerFunction', {
 });
 ```
 #### Queue Function - Produtor
+- Atualizar o `AzureWebJobsStorage` no arquivo `local.settings.json`
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node"
+  }
+}
+```
+- Código produtor
 ```javascript
 const { app, output } = require('@azure/functions');
 
@@ -283,6 +294,7 @@ app.http('enviarMensagemFunction', {
 });
 ```
 #### Queue Function - Consumidor
+- Código consumidor
 ```javascript
 const { app } = require('@azure/functions');
 
