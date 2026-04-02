@@ -307,7 +307,7 @@ app.storageQueue('processarFilaFunction', {
     }
 });
 ```
-#### Blob Function - Produtor
+#### Blob Function
 - Código **Nodejs** cliente para efetuar o upload do arquivo
 - Criar o projeto
 ```bash
