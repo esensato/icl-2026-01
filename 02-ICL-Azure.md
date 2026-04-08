@@ -217,17 +217,27 @@ func start
 ```javascript
 const { app } = require('@azure/functions');
 
-app.http('helloFunction', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
+app.http('httpFunctionTeste', {
+    methods: ['GET'],
+    route: 'mensagem/{nome}',
+    authLevel: 'function',
     handler: async (request, context) => {
-        context.log(`Http function processed request for url "${request.url}"`);
 
-        const name = request.query.get('name') || await request.text() || 'world';
+        context.log("Recebida a requisicao", request.params.nome);
+        const nome_requisicao = request.params.nome || 'Anonimo'
+        const msg = request.query.get('msg') || 'Funcionou httpFunctionTeste';
 
-        return { body: `Hello, ${name}!` };
+        return {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+            jsonBody: { msg: `${nome_requisicao} ${msg}` }
+        };
     }
 });
+```
+- No exemplo acima, repara que podem ser passados dois parâmetros pela *URL* (`request.params.nome` e `request.query.get('msg')`)
+```bash
+http://localhost:7071/api/mensagem/Joao?msg=ok
 ```
 #### Timer Function
 ```javascript
