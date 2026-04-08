@@ -568,7 +568,41 @@ app.listen(3000, () => {
 });
 ```
 - Adaptar o código acima para realizar o upload na **Azure**
+### Armazenamento Configurações Locais e na Cloud
+- Configurações podem ser armazenadas **localmente** no arquivo `local.settings.json`
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "DB_PASSWORD": "123456",
+    "API_KEY": "minha-chave"
+  }
+}
+```
+- Podem ser acessadas via código desta forma
+```javascript
+const senha = process.env.DB_PASSWORD;
+```
+- Já no ambiente cloud essas configurações devem ser criadas de outra forma
+```bash
+az functionapp config appsettings set --name minha-function --resource-group rg-app-functions --settings DB_PASSWORD=123456 API_KEY=minha-chave
+```
+- Ou ainda, na forma de *secrets* utilizando o **Azure Key Vault**
+```bash
+az keyvault create --name meu-keyvault --resource-group rg-app-functions --location brazilsouth
+az keyvault secret set --vault-name meu-keyvault --name DB_PASSWORD --value 123456
+```
+- Para acessar via código dentro das funções
+```javascript
+DB_PASSWORD=@Microsoft.KeyVault(SecretUri=https://meu-keyvault.vault.azure.net/secrets/DB_PASSWORD)
+```
 ### Acesso Banco de Dados
+- Configurar a string de conexão como uma variável de ambiente
+```bash
+az functionapp config appsettings set --name minha-function --resource-group rg-app-functions --settings SqlConnectionString="Server=tcp:meusql.database.windows.net,1433;Initial Catalog=db;User ID=user;Password=senha;Encrypt=True;"
+```
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
 const { app, input } = require('@azure/functions');
