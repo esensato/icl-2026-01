@@ -716,6 +716,35 @@ async function inserirRecibo() {
 
 inserirRecibo();
 ```
+### Aplicação Cliente para Testes
+- Criar uma aplicação cliente para interagir com as funções criadas
+```bash
+mkdir cliente-post
+cd cliente-post
+npm init -y
+npm install --save axios
+```
+- Código exemplo
+```javascript
+const axios = require('axios');
+
+async function enviarPost() {
+    try {
+        const resposta = await axios.post('http://localhost:3000/dados', {
+            nome: 'Edson',
+            valor: 100
+        });
+
+        console.log('Resposta da API:');
+        console.log(resposta.data);
+
+    } catch (erro) {
+        console.error('Erro:', erro.message);
+    }
+}
+
+enviarPost();
+```
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
