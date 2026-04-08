@@ -255,7 +255,7 @@ app.timer('timerFunction', {
 - Instalar o **Azurite** para testar o armazenamento localmente
 ```bash
 npm install -g azurite
-azurite --skipApiVersionCheck
+azurite --skipApiVersionCheck --location ./data
 ```
 - Atualizar o `AzureWebJobsStorage` no arquivo `local.settings.json`
 ```json
