@@ -252,6 +252,11 @@ app.timer('timerFunction', {
 });
 ```
 #### Queue Function - Produtor
+- Instalar o **Azurite** para testar o armazenamento localmente
+```bash
+npm install -g azurite
+azurite --skipApiVersionCheck
+```
 - Atualizar o `AzureWebJobsStorage` no arquivo `local.settings.json`
 ```json
 {
@@ -336,11 +341,6 @@ app.storageQueue('processarFilaFunction', {
 mkdir upload-blob
 cd upload-blob
 npm init -y
-```
-- Instalar o **Azurite** para testar o armazenamento localmente
-```bash
-npm install -g azurite
-azurite --skipApiVersionCheck
 ```
 - Instalar as dependências
 ```bash
