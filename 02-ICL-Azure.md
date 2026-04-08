@@ -205,6 +205,16 @@ az functionapp list --output table
 az functionapp function list --name minha-func-app --resource-group rg-demo --output table
 az functionapp function show --name minha-func-app --resource-group rg-demo --function-name helloFunction
 ```
+- Criar uma aplicação do tipo **Azure Functions** via linha de comando
+```bash
+$env:AZURE_CORE_ONLY_SHOW_ERRORS = "true"
+
+az group create --name rg-app-functions --location brazilsouth
+
+az storage account create --name appfunctionsstorage --resource-group rg-app-functions --location brazilsouth --sku Standard_LRS
+
+az functionapp create --resource-group rg-app-functions --consumption-plan-location brazilsouth --runtime node --functions-version 4 --name app-functions-$(Get-Date -Format 'yyyyMMddHHmmss') --storage-account appfunctionsstorage
+```
 - Para efetuar testes locais
 ```bash
 npm install -g azure-functions-core-tools@4
@@ -334,7 +344,30 @@ app.storageQueue('processarFilaFunction', {
     }
 });
 ```
+#### Storage
+- Listar todas as contas de armazenamento
+```bash
+az storage account list --output table
+az storage account list --query "[].name" -o tsv
+az storage account show --name appfunctionsstorage --resource-group rg-app-functions
+```
+- Obter a string de conexão
+```bash
+az storage account show-connection-string --name appfunctionsstorage --resource-group rg-app-functions
+```
+- Criar um storage do tipo *queue*
+```bash
+az storage queue create --name fila-teste --account-name appfunctionsstorage --connection-string <COLOCAR_AQUI_STRING_CONEXAO>
+``` 
 #### Blob Function
+- Criar o *storage* para armazenar arquivos do tipo *blob* (imagens, por exemplo)
+```bash
+az storage container create --name upload --account-name appfunctionsstorage --connection-string <COLOCAR_AQUI_STRING_CONEXAO>
+```
+- Para tornar o repositório público
+```bash
+az storage container set-permission --name upload --public-access blob --account-name appfunctionsstorage --connection-string <COLOCAR_AQUI_STRING_CONEXAO>
+```
 - Código **Nodejs** cliente para efetuar o upload do arquivo
 - Criar o projeto
 ```bash
