@@ -719,8 +719,8 @@ inserirRecibo();
 ### Aplicação Cliente para Testes
 - Criar uma aplicação cliente para interagir com as funções criadas
 ```bash
-mkdir cliente-post
-cd cliente-post
+mkdir cliente-teste
+cd cliente-teste
 npm init -y
 npm install --save axios
 ```
