@@ -5,6 +5,7 @@
 az group list --output table
 az resource list --output table
 az provider register --namespace Microsoft.OperationalInsights
+az provider register --namespace Microsoft.sql
 ```
 ### Acessando Banco SQL Server
 - Criar uma instância de banco de dados **SQL Server** usando o *CLI* (`az`)
