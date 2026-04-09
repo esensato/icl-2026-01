@@ -30,10 +30,7 @@ az group delete --name rg-demo --yes --no-wait
 ```
 - Efretuar a conexão com o banco de dados criado
 ```bash
-sqlcmd -S meusqlserver123.database.windows.net \
-       -d db \
-       -U adminuser \
-       -P 'SenhaForte!123'
+sqlcmd -S meusqlserver123.database.windows.net -d db -U adminuser -P 'SenhaForte!123'
 ```
 - Código *SQL* para criar as tabelas utilizadas nos exemplos
 ```sql
