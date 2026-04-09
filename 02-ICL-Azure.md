@@ -595,7 +595,7 @@ DB_PASSWORD=@Microsoft.KeyVault(SecretUri=https://meu-keyvault.vault.azure.net/s
 ### Acesso Banco de Dados
 - Configurar a string de conexão como uma variável de ambiente
 ```bash
-az functionapp config appsettings set --name minha-function --resource-group rg-app-functions --settings SqlConnectionString="Server=tcp:meusql.database.windows.net,1433;Initial Catalog=db;User ID=user;Password=senha;Encrypt=True;"
+az functionapp config appsettings set --name minha-function --resource-group rg-app-functions --settings SqlConnectionString="Server=tcp:meusqlserver123.database.windows.net,1433;Initial Catalog=db;User ID=adminuser;Password=SenhaForte!123;Encrypt=True;"
 ```
 - Exemplo de uma function que utiliza o recurso de **binding** para efetuar uma consulta ao banco de dados
 ```javascript
