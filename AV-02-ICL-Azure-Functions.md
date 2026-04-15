@@ -44,6 +44,21 @@ sqlcmd -S av02iclsql.database.windows.net -d db -U adminuser -P 'SenhaForte!123'
 CREATE TABLE RECIBO (Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY, TOTAL NVARCHAR(20));
 GO
 ```
+- Criar a variável com a *string* de conexão com o banco de dados na **Azure**
+```bash
+az functionapp config appsettings set --name app-functions-<<OBTER_NOME_FUNCAO>> --resource-group av-02-icl-azure-functions --settings SqlConnectionString="Server=tcp:av02iclsql.database.windows.net,1433;Initial Catalog=db;User ID=adminuser;Password=SenhaForte!123;Encrypt=True;"
+```
+- Para testes locais incluir no arquivo `local.settings.json`
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "SqlConnectionString": "Server=tcp:av02iclsql.database.windows.net,1433;Initial Catalog=db;User ID=adminuser;Password=SenhaForte!123;Encrypt=True;",
+    "FUNCTIONS_WORKER_RUNTIME": "node"
+  }
+}
+```
 #### VS Code
 - Instalar as dependências
 ```bash
