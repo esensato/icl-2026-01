@@ -3,7 +3,7 @@
 #### Preparação
 
 - Acessar o [portal.azure.com](https://portal.azure.com/auth/login/)
-- Já no portal, acessar o **Cloud Shell* na barra superior da tela
+- Já no portal, acessar o **Cloud Shell** na barra superior da tela
 - Cria um grupo de recursos chamado `av-02-icl-azure-functions` na *location* `brazilsouth`
 - Instanciar o serviço de reconhecimento de documentos
 ```bash
