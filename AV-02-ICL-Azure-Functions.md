@@ -3,6 +3,7 @@
 #### Preparação
 
 - Acessar o [portal.azure.com](https://portal.azure.com/auth/login/)
+- [Regioes Acesso](https://learn.microsoft.com/en-us/answers/questions/5543693/how-to-fix-(code-requestdisallowedbyazure-target-s)
 - Já no portal, acessar o **Cloud Shell** na barra superior da tela
 - Cria um grupo de recursos chamado `av-02-icl-azure-functions` na *location* `brazilsouth`
 - Instanciar o serviço de reconhecimento de documentos
