@@ -108,6 +108,7 @@ const teste = async () => {
 
 teste();
 ```
+- Exemplos de imagens de recibos podem ser obtidas [AQUI](https://github.com/Azure-Samples/document-intelligence-code-samples/tree/main/Data/receipt)
 #### Implementação
 - Criar uma função do tipo **HTTP** que deve receber um arquivo de imagem e encaminhar para análise do serviço cognitivo instanciado anteriormente
 - Utilizar o código de base
