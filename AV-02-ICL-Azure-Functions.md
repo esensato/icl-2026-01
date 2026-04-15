@@ -203,7 +203,7 @@ teste();
   }
 ```
 - A função deve extrair o atributo `Total` retornado (`analise.data.analyzeResult.documents[0].fields.Total`) e encaminhar para uma fila
-- O consumidor desta fila deve inserir o total em uma tabela do banco de dados (criado anteriormente)
-- Criar uma nova função que responda à requisições `GET` para listar todos os totais armazenados até o momento na tabela
+- O consumidor desta fila deve inserir o total em uma tabela do banco de dados (criado anteriormente) - [EXEMPLO](https://github.com/esensato/icl-2026-01/blob/main/02-ICL-Azure.md#acesso-banco-de-dados)
+- Criar uma nova função que responda à requisições `GET` para listar todos os totais armazenados até o momento na tabela - [EXEMPLO](https://github.com/esensato/icl-2026-01/blob/main/02-ICL-Azure.md#acesso-banco-de-dados)
 - Efetuar o *deploy* das funções no **Azure Cloud** e enviar o *link* na entrega da atividade
 
