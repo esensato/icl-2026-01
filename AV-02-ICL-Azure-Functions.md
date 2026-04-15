@@ -204,4 +204,5 @@ teste();
 - A função deve extrair o atributo `Total` retornado (`analise.data.analyzeResult.documents[0].fields.Total`) e encaminhar para uma fila
 - O consumidor desta fila deve inserir o total em uma tabela do banco de dados (criado anteriormente)
 - Criar uma nova função que responda à requisições `GET` para listar todos os totais armazenados até o momento na tabela
+- Efetuar o *deploy* das funções no **Azure Cloud**
 
