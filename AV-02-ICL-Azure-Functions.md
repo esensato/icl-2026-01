@@ -17,6 +17,14 @@ az cognitiveservices account show --name doc-intelligence --resource-group av-02
 ```bash
 az cognitiveservices account keys list --name doc-intelligence --resource-group av-02-icl-azure-functions
 ```
+- Para quem não conseguiu criar o **cognitiveservice**
+  - URL: `https://brazilsouth.api.cognitive.microsoft.com/`
+```json
+{
+  "key1": "FXRfeqH4rG9LogJXmKbMdalqSCKaNrmKzi2qBqHrDsUsHfWZPrbdJQQJ99CDACZoyfiXJ3w3AAALACOG7wEg",
+  "key2": "7gB7C4yd8KV00NgOQWhA5cV3n2tS3bukH6FVUnMLDEQHr6zaKZbgJQQJ99CDACZoyfiXJ3w3AAALACOGCK3A"
+}
+```
 - Criar uma aplicação do tipo **Azure Functions**
 ```bash
 $env:AZURE_CORE_ONLY_SHOW_ERRORS = "true"
