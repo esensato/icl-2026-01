@@ -111,9 +111,9 @@ cd app-pedido
 npm init -y
 npm install --save express @google-cloud/firestore
 ```
-- Já existe uma instância pronta para uso
+- Criar uma instância do banco de dados
 ```bash
-gcloud firestore databases list
+gcloud firestore databases create --location=southamerica-east1 --database app-pedido-$USER
 ```
 - Código exemplo
 ```javascript
@@ -123,7 +123,9 @@ const { Firestore } = require('@google-cloud/firestore');
 const app = express();
 app.use(express.json());
 
-const db = new Firestore();
+const db = new Firestore({
+  databaseId: '<COLOCAR_ID_AQUI_app-pedido-$USER>'
+});
 
 // Criar pedido
 app.post('/pedido', async (req, res) => {
