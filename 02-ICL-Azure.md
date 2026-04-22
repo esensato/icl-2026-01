@@ -776,6 +776,18 @@ enviarPost();
 ### Deploy Aplicação
 - Efetuar login no [portal.azure.com](https://portal.azure.com/) *(pressionar control para abrir em nova página)*
 - Abrir um **Cloud Shell** na barra de ferramentas superior dentro do **Portal Azure**
+- Criar um grupo de recursos para incluir uma VM, recursos de rede, armazenamento, etc...
+- Buscando por uma VM em uma configuração mais básica chamada `Standard_B1s`
+```bash
+$env:AZURE_CORE_ONLY_SHOW_ERRORS = "true"
+az group create --name rg-app --location eastus
+
+az vm list-skus --location eastus -o table
+
+az vm create --resource-group rg-app --name vm-demo --image Canonical:0001-com-ubuntu-minimal-jammy:minimal-22_04-lts-gen2:latest --admin-username azureuser --assign-identity --generate-ssh-keys --public-ip-sku Standard
+
+az vm create --resource-group rg-app --name vm-demo --image Ubuntu2204 --size Standard_DC1ds_v3 --admin-username azureuser --generate-ssh-keys
+```
 - Registrar *namespace* `Microsoft.OperationalInsights`
 ```bash
 az provider register --namespace Microsoft.OperationalInsights
