@@ -19,6 +19,10 @@ gcloud config set project app-project-$USER
 gcloud beta billing projects link app-project-$USER --billing-account=<OBTIDA_ACIMA>
 ```
 https://cloud.google.com/about/locations
+- Listar todas as APIs ativas para um projeto
+```bash
+gcloud services list --enabled
+```
 - Remover um projeto e todos os seus componentes
 ```bash
 gcloud projects delete <NOME_DO_PROJETO>
@@ -175,4 +179,14 @@ https://console.cloud.google.com/appengine
 
 gcloud app logs tail -s default
 
-
+### Google Cloud Functions
+- Criação de funções *serveless*
+- Código exemplo (arquivo `index.js`)
+```javascript
+exports.helloHttp = (req, res) => {
+  res.send("Hello Functions!");
+};
+```
+```bash
+gcloud functions deploy helloHttp --runtime=nodejs22 --trigger-http --allow-unauthenticated
+```
