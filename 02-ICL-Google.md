@@ -18,7 +18,6 @@ gcloud config set project app-project-$USER
 ```bash
 gcloud beta billing projects link app-project-$USER --billing-account=<OBTIDA_ACIMA>
 ```
-https://cloud.google.com/about/locations
 - Listar todas as APIs ativas para um projeto
 ```bash
 gcloud services list --enabled
@@ -27,6 +26,7 @@ gcloud services list --enabled
 ```bash
 gcloud projects delete <NOME_DO_PROJETO>
 ```
+- Regiões (*locations*) Google Cloud [https://cloud.google.com/about/locations](https://cloud.google.com/about/locations)
 #### App Engine
 - Serviço **PAAS** para publicação de aplicações
 - Criar o **App Engine**
