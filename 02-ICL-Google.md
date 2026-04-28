@@ -46,10 +46,14 @@ gcloud services list --enabled
 ```bash
 gcloud storage buckets add-iam-policy-binding gs://<DEFAULT_BUKET_COMANDO_ANTERIOR> --role="roles/storage.objectAdmin" --member="serviceAccount:<OBTIDO_COMANDO_ANTERIOR>" 
 ```
+- Criar o diretório da aplicação
+```bash
 mkdir app-engine-demo
 
 cd app-engine-demo
-
+```
+- Definir o `package.json` (no caso de uma aplicação **nodejs**)
+```bash
 cat <<EOF > package.json
 {
   "name": "app-engine-demo",
@@ -60,7 +64,9 @@ cat <<EOF > package.json
   }
 }
 EOF
-
+```
+- Criar a aplicação
+```javascript
 cat <<EOF > app.js
 const http = require('http');
 
@@ -76,7 +82,9 @@ server.listen(PORT, () => {
     console.log('Servidor rodando...', PORT);
 });
 EOF
-
+```
+- Criar o arquivo de *deploy*
+```bash
 cat <<EOF > app.yaml
 runtime: nodejs22
 entrypoint: node app.js
@@ -88,9 +96,9 @@ automatic_scaling:
   max_instances: 3
   target_cpu_utilization: 0.6
 EOF
-
-
-
+```
+- Comando para efetuar o *deploy* da aplicação
+```bash
 gcloud app deploy
 
 gcloud app deploy --no-cache --verbosity=debug --version=v1
@@ -106,7 +114,7 @@ gcloud app versions list
 gcloud app versions delete VERSION_ID
 
 gsutil rm -r gs://staging.app-project-esensato-1.appspot.com/*
-
+```
 ### Banco Dados Firebase
 - Criar o projeto e instalar as dependências
 ```bash
