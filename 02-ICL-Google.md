@@ -248,17 +248,6 @@ gcloud app create --region=southamerica-east1
 
 gcloud app describe
 ```
-- Verificar os **buckets** criados
-```bash
-gcloud storage buckets list | grep gs
-gcloud iam service-accounts list
-gcloud services list --enabled
-
-```
-- Adicionar as permissões necessárias (observar `defaultBucket` e `serviceAccount`)
-```bash
-gcloud storage buckets add-iam-policy-binding gs://<DEFAULT_BUKET_COMANDO_ANTERIOR> --role="roles/storage.objectAdmin" --member="serviceAccount:<OBTIDO_COMANDO_ANTERIOR>" 
-```
 - Criar o diretório da aplicação
 ```bash
 mkdir app-engine-demo
@@ -326,8 +315,9 @@ gcloud app versions list
 
 gcloud app versions delete VERSION_ID
 
-gsutil rm -r gs://staging.app-project-esensato-1.appspot.com/*
+gsutil ls gs://staging.app-project-esensato-1.appspot.com/*
 ```
+- Para verificar as aplicações **app engine** [https://console.cloud.google.com/appengine](https://console.cloud.google.com/appengine)
 ### Banco Dados Firebase
 - Criar o projeto e instalar as dependências
 ```bash
@@ -388,18 +378,7 @@ gcloud app browse
 ```bash
 curl -X POST https://SEU_URL/pedido -H "Content-Type: application/json" -d '{"cliente":"João","valor":100}'
 ```
-- Criar uma VM
-```bash
-gcloud compute instances create vm-demo --zone=us-central1-a --machine-type=e2-micro --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud
-```
-
-
-https://console.cloud.google.com/firestore/databases
-
-https://console.cloud.google.com/appengine
-
-gcloud app logs tail -s default
-
+- Para verificar as instâncias do **firestore** [https://console.cloud.google.com/firestore/databases](https://console.cloud.google.com/firestore/databases)
 ### Google Cloud Functions
 - Criação de funções *serveless*
 - Código exemplo (arquivo `index.js`)
