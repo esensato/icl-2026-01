@@ -30,6 +30,63 @@ gcloud config set project app-project-$USER
 ```bash
 gcloud projects describe $(gcloud config get-value project)
 ```
+#### Acessando Via RESTFul
+- Obter o *token* de acesso
+```bash
+gcloud auth print-access-token
+```
+- Realizar a requisição
+```bash
+curl -H "Authorization: Bearer $(gcloud auth print-access-token)" "https://cloudresourcemanager.googleapis.com/v1/projects"
+```
+#### Acessando Via Nodejs
+- Criar a estrutura do projeto
+```bash
+mkdir gcp-projects-demo
+cd gcp-projects-demo
+npm init -y
+```
+- Instalar as dependências
+```bash
+npm install --save google-auth-library axios
+```
+- Código exemplo (para listar os projetos)
+```bash
+const { GoogleAuth } = require('google-auth-library');
+const axios = require('axios');
+
+async function listarProjetos() {
+    try {
+        // Usa credenciais já autenticadas (Cloud Shell, gcloud auth, service account etc.)
+        const auth = new GoogleAuth({
+            scopes: ['https://www.googleapis.com/auth/cloud-platform.read-only']
+        });
+
+        const client = await auth.getClient();
+        const token = await client.getAccessToken();
+
+        const response = await axios.get(
+            'https://cloudresourcemanager.googleapis.com/v1/projects',
+            {
+                headers: {
+                    Authorization: `Bearer ${token.token}`
+                }
+            }
+        );
+
+        console.log("Projetos encontrados:\n");
+
+        response.data.projects.forEach(project => {
+            console.log(`- ${project.projectId} (${project.name})`);
+        });
+
+    } catch (erro) {
+        console.error("Erro:", erro.response?.data || erro.message);
+    }
+}
+
+listarProjetos();
+```
 #### Contas de Faturamento
 - Listar contas de faturamento
 ```bash
