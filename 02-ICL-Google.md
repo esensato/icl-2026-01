@@ -1,5 +1,5 @@
 ## Google Cloud
-- Acesso ao console web [https://console.cloud.google.com/](https://console.cloud.google.com/)
+- Acesso ao console web https://console.cloud.google.com/
 )
 #### gcloud
 - Exibir a versão
