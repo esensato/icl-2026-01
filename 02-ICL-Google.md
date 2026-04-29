@@ -1,12 +1,22 @@
 ## Google Cloud
-- Acessar o console
+
+#### gcloud
+- Exibir a versão
 ```bash
 gcloud -v
-gcloud config get-value project
 ```
-- Listar contas de faturamento
+- Listando as configurações
 ```bash
-gcloud beta billing accounts list --filter="open=true"
+gcloud config list
+```
+- Obtendo o valor de uma configuração dentro da sessão `[core]` (para definir um valor, utilizar o `set`)
+```bash
+gcloud config get account
+```
+#### Projetos
+- Listar todos os projetos criados
+```bash
+gcloud projects list
 ```
 - Criar um projeto e definí-lo no contexto (projeto de trabalho atual)
 ```bash
@@ -14,19 +24,43 @@ gcloud projects create app-project-$USER
 
 gcloud config set project app-project-$USER
 ```
+- Acessar o console
+```bash
+gcloud config get-value project
+```
+#### Contas de Faturamento
+- Listar contas de faturamento
+```bash
+gcloud beta billing accounts list --filter="open=true"
+```
 - Vincular o projeto a uma conta de cobrança (obtida acima)
 ```bash
 gcloud beta billing projects link app-project-$USER --billing-account=<OBTIDA_ACIMA>
-```
-- Listar todas as APIs ativas para um projeto
-```bash
-gcloud services list --enabled
 ```
 - Remover um projeto e todos os seus componentes
 ```bash
 gcloud projects delete <NOME_DO_PROJETO>
 ```
+#### APIs
+- Para habilitar uma determinada API no projeto atual
+```bash
+gcloud services enable compute.googleapis.com
+```
+- Listas as APIs habilitadas para o projeto atual
+```bash
+gcloud services list --enabled | grep compute
+```
+- Desabilitar uma API
+```bash
+gcloud services disable compute.googleapis.com
+```
+#### Regions e Zones
 - Regiões (*locations*) Google Cloud [https://cloud.google.com/about/locations](https://cloud.google.com/about/locations)
+- Listar *regions* e *zones*
+```bash
+gcloud compute regions list
+gcloud compute zones list
+```
 #### App Engine
 - Serviço **PAAS** para publicação de aplicações
 - Criar o **App Engine**
