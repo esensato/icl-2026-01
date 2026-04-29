@@ -17,6 +17,8 @@ gcloud config get account
 - Listar todos os projetos criados
 ```bash
 gcloud projects list
+
+gcloud projects list --filter="name=('meu-projeto-123')"
 ```
 - Criar um projeto e definí-lo no contexto (projeto de trabalho atual)
 ```bash
@@ -24,9 +26,9 @@ gcloud projects create app-project-$USER
 
 gcloud config set project app-project-$USER
 ```
-- Acessar o console
+- Obter informações do projeto
 ```bash
-gcloud config get-value project
+gcloud projects describe $(gcloud config get-value project)
 ```
 #### Contas de Faturamento
 - Listar contas de faturamento
@@ -60,6 +62,126 @@ gcloud services disable compute.googleapis.com
 ```bash
 gcloud compute regions list
 gcloud compute zones list
+gcloud compute firewall-rules list --filter="NETWORK:'default' AND ALLOW:'icmp'"
+```
+- Para definir uma *zone*
+```bash
+gcloud config set compute/region REGION
+```
+#### Vairáveis de Ambiente
+- Úteis para referenciar valores a serem utilizados em *scripts*
+```bash
+export PROJECT_ID=$(gcloud config get-value project)
+export ZONE=$(gcloud config get-value compute/zone)
+
+echo $PROJECT_ID
+echo $ZONE
+```
+#### Máquinas Virtuais
+```bash
+gcloud compute machine-types list --zones southamerica-west1-a
+
+gcloud compute machine-types list --zones southamerica-west1-a --filter="name=('e2-micro')"
+
+gcloud compute machine-types list --zones southamerica-west1-a --filter="name=('e2-medium')"
+
+gcloud compute instances create vm-1 --machine-type e2-micro --zone southamerica-west1-a
+
+gcloud compute instances list
+```
+- Além da VN também é criado um disco de armazenamento
+```bash
+gcloud compute disks list
+```
+- Efetuando uma conexão com a VM criada
+```bash
+gcloud compute ssh vm-1 --zone southamerica-west1-a
+```
+- Instalando um servidor *http* dentro da VM
+```bash
+sudo apt update && sudo apt install -y nginx
+
+echo "VM $(hostname)" | sudo tee /var/www/html/index.html
+
+exit
+```
+- Identificar a VM por meio de uma *tag*
+```bash
+gcloud compute instances add-tags vm-1 --tags http-server,https-server --zone southamerica-west1-a
+```
+- Listando regras de *firewall*
+```bash
+gcloud compute firewall-rules list --filter="NETWORK:'default' AND ALLOW:'icmp'"
+```
+- Adicionar regra ao *firewall*
+```bash
+gcloud compute firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+gcloud compute firewall-rules list --filter=ALLOW:'80'
+```
+- Testar utilizando o `curl`
+```bash
+curl http://$(gcloud compute instances list --filter=name:vm-1 --format='value(EXTERNAL_IP)')
+```
+#### Balanceamento Carga
+- Criar uma segunda VM (chamada **vm-2**) definindo uma *tag* para ela
+```bash
+gcloud compute instances add-tags vm-2 --tags http-server,https-server --zone southamerica-west1-a
+```
+- Criar um grupo de instâncias e adicionar as VMs
+```bash
+gcloud compute instance-groups unmanaged create nginx-group --zone=southamerica-west1-a
+gcloud compute instance-groups unmanaged add-instances nginx-group --zone=southamerica-west1-a --instances=vm-1,vm-2
+
+gcloud compute instance-groups list
+```
+- Criar uma porta em comum para acesso ao grupo de instâncias das VMs
+```bash
+gcloud compute instance-groups set-named-ports nginx-group --named-ports=http:80 --zone=southamerica-west1-a
+```
+- Criar o mecanismo de *health check* para determinar de as MVs estão de fato executando o serviço na porta 80 (padrão *http*)
+```bash
+gcloud compute health-checks create http nginx-health-check --port=80
+```
+- Criar o serviço de *backend* e adicionar o grupo de VMs
+```bash
+gcloud compute backend-services create nginx-backend --protocol=HTTP --health-checks=nginx-health-check --global
+gcloud compute backend-services add-backend nginx-backend --instance-group=nginx-group --instance-group-zone=southamerica-west1-a --global
+```
+- Criar o mapeamento de URL
+```bash
+gcloud compute url-maps create nginx-map --default-service=nginx-backend
+```
+- Instanciar o servidor *proxy* que irá realizar o balanceamento
+```bash
+gcloud compute target-http-proxies create nginx-proxy --url-map=nginx-map
+```
+- Adicionar a regra de *firewall*
+```bash
+gcloud compute forwarding-rules create nginx-rule --global --target-http-proxy=nginx-proxy --ports=80
+```
+- Obter o endereço de IP para acesso
+```bash
+gcloud compute forwarding-rules list
+```
+- Verificar a saúde das VMs
+```bash
+gcloud compute backend-services get-health nginx-backend --global
+```
+- Para parar e remover a instância da VM
+```bash
+gcloud compute instances stop vm-1 --zone=southamerica-west1-a
+gcloud compute instances delete vm-1 --zone=southamerica-west1-a
+```
+- Para remover o que foi criado
+```bash
+gcloud compute firewall-rules delete default-allow-http
+gcloud compute forwarding-rules delete nginx-rule --global
+gcloud compute target-http-proxies delete nginx-proxy
+gcloud compute url-maps delete nginx-map
+gcloud compute backend-services delete nginx-backend --global
+gcloud compute health-checks delete nginx-health-check
+gcloud compute instance-groups unmanaged delete nginx-group --zone=southamerica-west1-a
 ```
 #### App Engine
 - Serviço **PAAS** para publicação de aplicações
