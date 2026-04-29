@@ -30,6 +30,11 @@ gcloud config set project app-project-$USER
 ```bash
 gcloud projects describe $(gcloud config get-value project)
 ```
+- Listar todos os recursos associados a um projeto
+```bash
+gcloud services list --enabled
+gcloud asset search-all-resources --scope=projects/app-project-$USER --format="table(assetType,name,location)"
+```
 #### Acessando Via RESTFul
 - Obter o *token* de acesso
 ```bash
