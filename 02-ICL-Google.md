@@ -246,6 +246,92 @@ gcloud compute backend-services delete nginx-backend --global
 gcloud compute health-checks delete nginx-health-check
 gcloud compute instance-groups unmanaged delete nginx-group --zone=southamerica-west1-a
 ```
+## Google Cloud Run
+- Permite efetuar deploy de aplicações executadas em *containers*
+- Por exemplo, um código abaixo (`app.js`)
+```javascript
+const express = require('express');
+
+const app = express();
+app.use(express.json());
+
+// Endpoint simples
+app.get('/', (req, res) => {
+  res.send('API rodando no Cloud Run!');
+});
+
+// Criar pedido
+app.post('/pedido', (req, res) => {
+  const { cliente, valor } = req.body;
+
+  if (!cliente || !valor) {
+    return res.status(400).json({ erro: 'Dados inválidos' });
+  }
+
+  res.json({
+    mensagem: 'Pedido recebido',
+    pedido: {
+      cliente,
+      valor,
+      criadoEm: new Date()
+    }
+  });
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+```
+- Criar um arquivo de requisitos `package.json`
+```json
+{
+  "name": "cloud-run-pedidos",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
+```
+- Montar um arquivo `Dockerfile` para criação da imagem e *container*
+```yaml
+FROM node:20
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV PORT=8080
+
+CMD ["npm", "start"]
+```
+- Habilitar a API
+```bash
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
+```
+- Criar um repositório de artefatos para armazenar a imagem do container
+```bash
+gcloud artifacts repositories create cloud-run-source-deploy --repository-format=docker --location=southamerica-east1 --description="Repositorio Docker para Cloud Run"
+
+gcloud artifacts repositories list
+```
+- Isso irá criar um repositório com uma URL `southamerica-east1-docker.pkg.dev/SEU_PROJECT_ID/cloud-run-source-deploy`
+- Criar uma imagem com base nas configurações
+```bash
+gcloud builds submit --tag southamerica-east1-docker.pkg.dev/ssa-$USER/cloud-run-source-deploy/hello-cloud-run
+```
+- Efetuar o *deploy* com base na imagem
+```bash
+gcloud run deploy hello-cloud-run --image southamerica-east1-docker.pkg.dev/ssa-$USER/cloud-run-source-deploy/hello-cloud-run --region southamerica-east1 --allow-unauthenticated
+```
+- Para visualizar as execuções acessar a URL [https://console.cloud.google.com/run](https://console.cloud.google.com/run)
 #### App Engine
 - Serviço **PAAS** para publicação de aplicações
 - Criar o **App Engine**
