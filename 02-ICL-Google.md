@@ -387,12 +387,105 @@ curl -X POST https://SEU_URL/pedido -H "Content-Type: application/json" -d '{"cl
 - Para verificar as instâncias do **firestore** [https://console.cloud.google.com/firestore/databases](https://console.cloud.google.com/firestore/databases)
 ### Google Cloud Functions
 - Criação de funções *serveless*
+- Permissões necessárias
+```bash
+gcloud services enable pubsub.googleapis.com
+gcloud services enable firestore.googleapis.com
+```
 - Código exemplo (arquivo `index.js`)
 ```javascript
 exports.helloHttp = (req, res) => {
-  res.send("Hello Functions!");
+  const nome = req.query.nome || "mundo";
+  res.status(200).send(`Olá, ${nome}!`);
 };
 ```
 ```bash
 gcloud functions deploy helloHttp --runtime=nodejs22 --trigger-http --allow-unauthenticated
+```
+- Para testar: `curl "https://REGION-PROJECT.cloudfunctions.net/helloHttp?nome=Edson"`
+- Exemplo com uma requisição *POST*
+```javascript
+exports.criarPedido = (req, res) => {
+  const { cliente, valor } = req.body;
+
+  if (!cliente || !valor) {
+    return res.status(400).json({ erro: "Dados inválidos" });
+  }
+
+  res.status(201).json({
+    mensagem: "Pedido criado",
+    pedido: {
+      cliente,
+      valor,
+      criadoEm: new Date()
+    }
+  });
+};
+```
+- Para testar com *curl*
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"cliente":"João","valor":100}' \
+  https://REGION-PROJECT.cloudfunctions.net/criarPedido
+```
+- Exemplo *pub / sub*
+```javascript
+exports.processarPedido = (event) => {
+  const mensagem = JSON.parse(
+    Buffer.from(event.data, 'base64').toString()
+  );
+
+  console.log("Cliente:", mensagem.cliente);
+  console.log("Valor:", mensagem.valor);
+};
+```
+- Para publicar na fila
+```bash
+gcloud pubsub topics publish pedidos-topic \
+  --message='{"cliente":"Maria","valor":250}'
+```
+- Exemplo combinando os dois tipos de *functions*
+```bash
+const { PubSub } = require('@google-cloud/pubsub');
+const pubsub = new PubSub();
+
+exports.receberPedido = async (req, res) => {
+  const dados = JSON.stringify(req.body);
+
+  await pubsub.topic('pedidos-topic').publishMessage({
+    data: Buffer.from(dados)
+  });
+
+  res.status(200).send("Pedido enviado para processamento");
+};
+```
+- Exemplo de integração com o **Firestore**
+```javascript
+const { Firestore } = require('@google-cloud/firestore');
+
+const db = new Firestore();
+
+exports.processarPedido = async (event) => {
+  try {
+    const mensagem = JSON.parse(
+      Buffer.from(event.data, 'base64').toString()
+    );
+
+    console.log("Pedido recebido:", mensagem);
+
+    const docRef = await db.collection('pedidos').add({
+      cliente: mensagem.cliente,
+      valor: mensagem.valor,
+      criadoEm: mensagem.criadoEm,
+      processadoEm: new Date().toISOString()
+    });
+
+    console.log("Pedido salvo com ID:", docRef.id);
+
+  } catch (erro) {
+    console.error("Erro ao processar pedido:", erro);
+    throw erro; // importante para retry automático
+  }
+};
 ```
