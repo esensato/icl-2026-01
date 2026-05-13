@@ -530,6 +530,14 @@ exports.processarPedido = (event) => {
   console.log("Valor:", mensagem.valor);
 };
 ```
+- Habilitar a API
+```bash
+gcloud services enable eventarc.googleapis.com
+```
+- Efetuar o deploy da function
+```bash
+gcloud functions deploy processarPedido --runtime=nodejs22 --trigger-topic=pedido-topic --gen2 --location=southamerica-east1
+```
 - Para publicar na fila
 ```bash
 gcloud pubsub topics publish pedidos-topic \
