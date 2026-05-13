@@ -949,3 +949,8 @@ kubectl logs deployment/pvc-demo -f
 ```bash
 kubectl get storageclass
 ```
+- Remover os recursos alocados
+```bash
+kubectl delete deployment pvc-demo
+kubectl delete pvc contador-pvc
+```
