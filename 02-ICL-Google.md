@@ -575,3 +575,79 @@ exports.processarPedido = async (event) => {
   }
 };
 ```
+### Google Kubernetes Engine
+- Habilitar API
+```bash
+gcloud services enable container.googleapis.com
+```
+- Criar o cluster
+```bash
+gcloud container clusters create-auto aula-gke --region southamerica-east1
+```
+- Conectar ao cluster
+```bash
+gcloud container clusters get-credentials aula-gke --region southamerica-east1
+```
+- Listar os PODs
+```bash
+kubectl get nodes
+```
+- Criar o primeiro *deployment*
+```bash
+kubectl create deployment nginx-demo --image=nginx:1.27
+kubectl get pods
+```
+- Obter o *service*
+```bash
+kubectl expose deployment nginx-demo \
+  --port=80 \
+  --target-port=80 \
+  --type=LoadBalancer
+```
+- Obter o IP público e testar o serviço em um navegador
+```bash
+kubectl get service nginx-demo
+```
+- Escalar réplicas
+```bash
+kubectl scale deployment nginx-demo --replicas=3
+kubectl get pods -o wide
+```
+- Remover um POD e verificar sua recriação
+```bash
+kubectl delete pod NOME_DO_POD
+kubectl get pods -o wide
+```
+- Efetuar um *roll-out**
+```bash
+kubectl set image deployment/nginx-demo \
+  nginx=nginx:latest
+
+kubectl rollout status deployment/nginx-demo
+
+kubectl describe deployment nginx-demo
+
+kubectl logs deployment/nginx-demo
+```
+- Gerar o arquivo *yaml* do *deployment*
+```bash
+kubectl get deployment nginx-demo -o yaml
+```
+- Para aplicar um *manifest*
+```bash
+kubectl apply -f nginx.yaml
+```
+- Comandos úteis
+```bash
+kubectl get all
+kubectl get deployment
+kubectl get replicaset
+kubectl get pods
+kubectl get services
+```
+- Removendo os recursos
+```bash
+kubectl delete service nginx-demo
+kubectl delete deployment nginx-demo
+gcloud container clusters delete aula-gke --region southamerica-east1
+```
