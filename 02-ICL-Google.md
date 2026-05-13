@@ -650,3 +650,302 @@ kubectl delete service nginx-demo
 kubectl delete deployment nginx-demo
 gcloud container clusters delete aula-gke --region southamerica-east1
 ```
+#### ConfigMaps
+- Criar um *ConfigMap*
+```bash
+kubectl create configmap app-config --from-literal=MENSAGEM="Olá do ConfigMap no Kubernetes!"
+```
+- Verificar o *ConfigMap* criado
+```bash
+kubectl get configmap
+kubectl describe configmap app-config
+kubectl get configmap app-config -o yaml
+```
+- Criar o *deployment* que irá utilizar o *ConfigMap* (arquivo `deployment-configmap.yaml`)
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configmap-demo
+  template:
+    metadata:
+      labels:
+        app: configmap-demo
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          while true; do
+            echo "$MENSAGEM" > /www/index.html
+            httpd -f -p 8080 -h /www
+            sleep 3600
+          done
+        env:
+        - name: MENSAGEM
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: MENSAGEM
+        ports:
+        - containerPort: 8080
+```
+- Aplicar o *deployment*
+```bash
+kubectl apply -f deployment-configmap.yaml
+```
+- Expor o serviço e obter o IP público
+```bash
+kubectl expose deployment configmap-demo \
+  --port=80 \
+  --target-port=8080 \
+  --type=LoadBalancer
+
+kubectl get service configmap-demo
+```
+- Limpando os recursos alocados
+```bash
+kubectl delete service configmap-demo
+kubectl delete deployment configmap-demo
+kubectl delete configmap app-config
+```
+#### Secrets
+- Criar um *secret*
+```bash
+kubectl create secret generic db-secret \
+  --from-literal=DB_USER=admin \
+  --from-literal=DB_PASSWORD=MinhaSenhaSuperSecreta
+```
+- Visualizar o *secret*
+```bash
+kubectl get secrets
+kubectl describe secret db-secret
+kubectl get secret db-secret -o yaml
+```
+- Criar o *deployment* que irá utilizar o *secret* (arquivo `secret-demo.yaml`)
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secret-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: secret-demo
+  template:
+    metadata:
+      labels:
+        app: secret-demo
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          echo "Usuário: $DB_USER"
+          echo "Senha: $DB_PASSWORD"
+          sleep 3600
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
+```
+- Aplicar o *deployment*
+```bash
+kubectl apply -f secret-demo.yaml
+```
+- Verificar os valores no *log*
+```bash
+kubectl logs deployment/secret-demo
+```
+- Verificar os valores dentro do próprio *container*
+```bash
+kubectl exec -it deployment/secret-demo -- sh
+
+echo $DB_USER
+echo $DB_PASSWORD
+```
+- Para atualizar o *secret*
+```bash
+kubectl create secret generic db-secret \
+  --from-literal=DB_USER=admin \
+  --from-literal=DB_PASSWORD=NovaSenha123 \
+  --dry-run=client -o yaml | kubectl apply -f -
+```
+- Aplicar a atualização para os *PODs*
+```bash
+kubectl rollout restart deployment secret-demo
+```
+- Liberando os recursos alocados
+```bash
+kubectl delete deployment secret-demo
+kubectl delete secret db-secret
+```
+#### Volumes
+- Exemplo de *emptyDir* (arquivo `volume-demo.yaml`)
+- Neste exemplo, um *container* irá escrever no arquivo e o outro irá ler
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-demo
+spec:
+  containers:
+  - name: writer
+    image: busybox
+    command:
+    - sh
+    - -c
+    - |
+      i=0
+      while true; do
+        echo "Contador: $i" > /dados/contador.txt
+        i=$((i+1))
+        sleep 2
+      done
+    volumeMounts:
+    - name: dados
+      mountPath: /dados
+
+  - name: reader
+    image: busybox
+    command:
+    - sh
+    - -c
+    - |
+      while true; do
+        cat /dados/contador.txt 2>/dev/null || echo "Arquivo ainda não existe"
+        sleep 2
+      done
+    volumeMounts:
+    - name: dados
+      mountPath: /dados
+
+  volumes:
+  - name: dados
+    emptyDir: {}
+```
+- Aplicar o *deployment*
+```bash
+kubectl apply -f volume-demo.yaml
+```
+- Exibir os *logs*
+```bash
+kubectl logs volume-demo -c reader -f
+```
+- Reiniciar os *containers* e verificar no *log* que o contador é zerado
+```bash
+kubectl delete pod volume-demo
+kubectl apply -f volume-demo.yaml
+
+kubectl logs volume-demo -c reader -f
+```
+- Definindo um *volume* para *ConfigMap*
+```yaml
+volumes:
+- name: config-volume
+  configMap:
+    name: app-config
+```
+- Definindo um *volume* para *secret*
+```yaml
+volumes:
+- name: secret-volume
+  secret:
+    secretName: db-secret
+```
+- Exemplo de *PersistentVolumeClaim* (arquivo `pvc-demo.yaml`)
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: contador-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvc-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pvc-demo
+  template:
+    metadata:
+      labels:
+        app: pvc-demo
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          if [ ! -f /dados/contador ]; then
+            echo 0 > /dados/contador
+          fi
+
+          while true; do
+            valor=$(cat /dados/contador)
+            echo "Valor atual: $valor"
+            echo $((valor + 1)) > /dados/contador
+            sleep 5
+          done
+        volumeMounts:
+        - name: dados
+          mountPath: /dados
+      volumes:
+      - name: dados
+        persistentVolumeClaim:
+          claimName: contador-pvc
+```
+- Aplicar
+```bash
+kubectl apply -f pvc-demo.yaml
+```
+- Verificar o *pvc* e o *pv* criados
+```bash
+kubectl get pvc
+kubectl get pv
+```
+- Verificar os *logs*
+```bash
+kubectl logs deployment/pvc-demo -f
+```
+- Remover o *POD*
+```bash
+kubectl delete pod -l app=pvc-demo
+```
+- Verificar os *logs*
+```bash
+kubectl logs deployment/pvc-demo -f
+```
+- Verificar os *storage class*
+```bash
+kubectl get storageclass
+```
