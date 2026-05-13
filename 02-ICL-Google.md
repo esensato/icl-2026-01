@@ -484,6 +484,11 @@ exports.helloHttp = (req, res) => {
   res.status(200).send(`Olá, ${nome}!`);
 };
 ```
+- Criar o arquivo `package.json`
+```bash
+npm init -y
+```
+- Efetuar o deploy da function
 ```bash
 gcloud functions deploy helloHttp --runtime=nodejs22 --trigger-http --allow-unauthenticated
 ```
